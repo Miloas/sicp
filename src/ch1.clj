@@ -10,6 +10,7 @@
 ;1.3
 (defn sum-max2 [a b c]
   (- (+ a b c) (min a b c)))
+
 ;1.3 test
 (tt (sum-max2 3 1 2))
 
@@ -22,6 +23,7 @@
             (let [new-guess (improve guess)]
               (if (good-enough? guess new-guess) new-guess (help new-guess))))]
     (help 1.0)))
+
 ;1.7 test
 (tt (sqrt 16))
 
@@ -33,6 +35,7 @@
             (let [new-guess (improve guess)]
               (if (good-enough? guess new-guess) new-guess (help new-guess))))]
     (help 1.0)))
+
 ;1.8 test
 (tt (cube-root 27))
 
@@ -53,3 +56,11 @@
 (tt (f-rec 5))
 (tt (f-iter 2))
 (tt (f-iter 5))
+
+;1.12
+(defn pascal [r c]
+  (cond (or (<= r 0) (<= c 0) (> c r)) 0
+        (or (= r 1) (= r 2) (= r c)) 1
+        :else (+ (pascal (- r 1) c) (pascal (- r 1) (- c 1)))
+    ))
+(tt (pascal 4 2))
