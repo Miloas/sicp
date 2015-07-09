@@ -6,6 +6,8 @@
 
 ;help fn
 (defn square [x] (* x x))
+(defn mydouble [x] (+ x x))
+(defn halve [x] (/ x 2))
 
 ;1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
@@ -23,7 +25,7 @@
 ;1.7
 (defn sqrt [x]
   (letfn [(good-enough? [last-guess this-guess] (< (Math/abs (- last-guess this-guess)) 0.0000001))
-          (average [x y] (/ (+ x y) 2))
+          (average [x y] (halve (+ x y)))
           (improve [guess] (average guess (/ x guess)))
           (help [guess]
             (let [new-guess (improve guess)]
@@ -85,7 +87,7 @@
 (defn fast-exp-iter [b n]
   (letfn [(help [a b n]
           (cond (= n 0) a
-                (even? n) (help a (square b) (/ n 2))
+                (even? n) (help a (square b) (halve n))
                 :else (help (* a b) b (dec n))))]
     (help 1 b n)))
 
@@ -93,3 +95,16 @@
 (deftest test-1-16
   (is (= 1024 (fast-exp-iter 2 10))))
 (test-1-16)
+
+;1.17
+(defn fast-mult-rec [a b]
+  (cond (or (= a 0) (= b 0)) 0
+        (= a 1) b
+        (= b 1) a
+        (even? b) (mydouble (fast-mult-rec a (halve b)))
+        :else (+ a (fast-mult-rec a (- b 1)))))
+
+;1.17 test
+(deftest test-1-17
+  (is (= (* 3 4) (fast-mult-rec 3 4))))
+(test-1-17)
