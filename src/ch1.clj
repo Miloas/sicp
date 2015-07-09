@@ -36,3 +36,20 @@
 ;1.8 test
 (tt (cube-root 27))
 
+;1.11
+(defn f-rec [n]
+  (if (< n 3) n
+    (+ (f-rec (- n 1))
+       (f-rec (- n 2))
+       (f-rec (- n 3)))))
+
+(defn f-iter [n]
+  (letfn [(help [a b c cnt]
+            (if (= cnt n) (+ a b c) (help b c (+ a b c) (+ cnt 1))))]
+    (if (< n 3) n (help 0 1 2 3))))
+
+;1.11test
+(tt (f-rec 2))
+(tt (f-rec 5))
+(tt (f-iter 2))
+(tt (f-iter 5))
