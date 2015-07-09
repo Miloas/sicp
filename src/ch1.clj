@@ -2,6 +2,7 @@
 
 ;test fn
 (defn tt [x] (println x))
+(use 'clojure.test)
 
 ;1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
@@ -12,7 +13,9 @@
   (- (+ a b c) (min a b c)))
 
 ;1.3 test
-(tt (sum-max2 3 1 2))
+(deftest test-1-3
+  (is (= 5 (sum-max2 3 1 2))))
+(test-1-3)
 
 ;1.7
 (defn sqrt [x]
@@ -25,7 +28,9 @@
     (help 1.0)))
 
 ;1.7 test
-(tt (sqrt 16))
+(deftest test-1-7
+  (is (= 4.0 (sqrt 16))))
+(test-1-7)
 
 ;1.8
 (defn cube-root [x]
@@ -37,7 +42,9 @@
     (help 1.0)))
 
 ;1.8 test
-(tt (cube-root 27))
+(deftest test-1-8
+  (is (= 3 (cube-root 27))))
+(test-1-8)
 
 ;1.11
 (defn f-rec [n]
@@ -51,11 +58,12 @@
             (if (= cnt n) (+ a b c) (help b c (+ a b c) (+ cnt 1))))]
     (if (< n 3) n (help 0 1 2 3))))
 
-;1.11test
-(tt (f-rec 2))
-(tt (f-rec 5))
-(tt (f-iter 2))
-(tt (f-iter 5))
+;1.11 test
+(deftest test-1-11
+  (is (= 2 (f-rec 2)))
+  (is (= 11 (f-rec 5)))
+  (is (= 2 (f-iter 2)))
+  (is (= 11 (f-iter 5))))
 
 ;1.12
 (defn pascal [r c]
@@ -63,4 +71,7 @@
         (or (= r 1) (= r 2) (= r c)) 1
         :else (+ (pascal (- r 1) c) (pascal (- r 1) (- c 1)))
     ))
-(tt (pascal 4 2))
+
+;1.12 test
+(deftest test-1-12
+  (is (= 3 (pascal 4 2))))
