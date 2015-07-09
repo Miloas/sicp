@@ -12,4 +12,13 @@
 
 ;1.7
 (defn sqrt [x]
-  (letfn []))
+  (letfn [(good-enough? [last-guess this-guess] (< (Math/abs (- last-guess this-guess)) 0.0000001))
+          (average [x y] (/ (+ x y) 2))
+          (improve [guess] (average guess (/ x guess)))
+          (help [guess]
+            (let [new-guess (improve guess)]
+              (if (good-enough? guess new-guess) new-guess (help new-guess))))]
+    (help 1.0)))
+;1.7 test
+(println (sqrt 16))
+
