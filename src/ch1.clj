@@ -4,6 +4,9 @@
 (defn tt [x] (println x))
 (use 'clojure.test)
 
+;help fn
+(defn square [x] (* x x))
+
 ;1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
             (* 3 (- 6 2) (- 2 7))) ; -47/150
@@ -35,7 +38,7 @@
 ;1.8
 (defn cube-root [x]
   (letfn [(good-enough? [last-guess this-guess] (< (Math/abs (- last-guess this-guess)) 0.0000001))
-          (improve [guess] (/ (+ (/ x (* guess guess)) (* 2 guess))) 3)
+          (improve [guess] (/ (+ (/ x (square guess)) (* 2 guess))) 3)
           (help [guess]
             (let [new-guess (improve guess)]
               (if (good-enough? guess new-guess) new-guess (help new-guess))))]
@@ -55,7 +58,7 @@
 
 (defn f-iter [n]
   (letfn [(help [a b c cnt]
-            (if (= cnt n) (+ a b c) (help b c (+ a b c) (+ cnt 1))))]
+            (if (= cnt n) (+ a b c) (help b c (+ a b c) (inc cnt))))]
     (if (< n 3) n (help 0 1 2 3))))
 
 ;1.11 test
@@ -64,6 +67,7 @@
   (is (= 11 (f-rec 5)))
   (is (= 2 (f-iter 2)))
   (is (= 11 (f-iter 5))))
+(test-1-11)
 
 ;1.12
 (defn pascal [r c]
@@ -75,3 +79,17 @@
 ;1.12 test
 (deftest test-1-12
   (is (= 3 (pascal 4 2))))
+(test-1-12)
+
+;1.16
+(defn fast-exp-iter [b n]
+  (letfn [(help [a b n]
+          (cond (= n 0) a
+                (even? n) (help a (square b) (/ n 2))
+                :else (help (* a b) b (dec n))))]
+    (help 1 b n)))
+
+;1.16 test
+(deftest test-1-16
+  (is (= 1024 (fast-exp-iter 2 10))))
+(test-1-16)
