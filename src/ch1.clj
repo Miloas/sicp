@@ -108,3 +108,14 @@
 (deftest test-1-17
   (is (= (* 3 4) (fast-mult-rec 3 4))))
 (test-1-17)
+
+;1.18
+(defn fast-mult-iter [a b]
+  (letfn [(help [a b result]
+            (cond (or (= b 1) (= b 0) (= a 0)) result
+              (even? b) (help (mydouble a) (halve b) result)
+              :else (help a (- b 1) (+ result a))))]
+    (help a b 0)))
+;1.18
+(deftest test-1-18
+  (is (= (* 3 4) (fast-mult-iter 3 4))))
