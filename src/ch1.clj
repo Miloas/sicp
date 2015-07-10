@@ -116,6 +116,20 @@
               (even? b) (help (mydouble a) (halve b) result)
               :else (help a (- b 1) (+ result a))))]
     (help a b 0)))
+
 ;1.18
 (deftest test-1-18
   (is (= (* 3 4) (fast-mult-iter 3 4))))
+
+;1.19
+(defn fib-iter [a b p q count]
+  (cond (= count 0) b
+        (even? count) (fib-iter a b (square q) (+ (square q) (* 2 p q)) (halve count))
+        :else (fib-iter (+ (* b q) (* a q) (* a p)) (+ (* b q) (* a q)) p q (dec count))))
+(defn fib [n]
+  (fib-iter 1 0 0 1 n))
+
+;1.19 test
+(deftest test-1-19
+  (is (= (+ (fib 3) (fib 4)) (fib 5))))
+
