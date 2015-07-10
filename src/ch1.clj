@@ -133,3 +133,34 @@
 (deftest test-1-19
   (is (= (+ (fib 3) (fib 4)) (fib 5))))
 
+;1.22
+(defn divides? [a b]
+  (= (rem b a) 0))
+(defn smallest-divisor [n]
+  (letfn [(find-divisor [n test-divisor]
+            (cond (> (square test-divisor) n) n
+              (divides? test-divisor n) test-divisor
+              :else (find-divisor n (inc test-divisor))))]
+    (find-divisor n 2)))
+(defn prime? [n]
+  (= n (smallest-divisor n)))
+(defn prime-interval [l r]
+  "If can't find return r+1"
+  (cond (= l (inc r)) (inc r)
+        (= l 2) 2
+        (and (odd? l) (prime? l)) l
+        :else (prime-interval (inc l) r)))
+
+;I don't know why..  strange time..
+;(time (tt (prime-interval 2 3)))
+;(time (tt (prime-interval 20 30)))
+;(time (tt (prime-interval 200 300)))
+;(time (tt (prime-interval 2000 3000)))
+;(time (tt (prime-interval 20000 30000)))
+;(time (tt (prime-interval 200000 300000)))
+
+;1.22 test
+(deftest test-1-22
+  (is (= 2 (prime-interval 2 3))
+      (= 23 (prime-interval 20 30))))
+(test-1-22)
