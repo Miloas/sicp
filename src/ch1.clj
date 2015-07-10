@@ -176,6 +176,25 @@
     :else (prime-interval2 (inc l) r)))
 
 ;1.24
+(defn expmod [a n m]
+  (cond (= n 0) 1
+        (even? n) (rem (square (expmod a (halve n) m)) m)
+        :else (rem (* a (expmod a (dec n) m)) m)))
+(defn fermat-test [x]
+  (letfn [(try-it [a]
+            (= (expmod a x x) a))]
+    (try-it (inc (rand-int (dec x))))))
+(defn fast-prime? [x times]
+  (cond (= times 0) true
+        (fermat-test x) (fast-prime? x (dec times))
+        :else false))
 
+;1.24 test
+(deftest test-1-24
+  (is (= true (fast-prime? 101 3))
+      (= false (fast-prime? 4 1))))
+(test-1-24)
+
+;1.27
 
 
