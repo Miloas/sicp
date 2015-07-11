@@ -196,5 +196,15 @@
 (test-1-24)
 
 ;1.27
+(defn carmichael? [x]
+  (and (not (prime? x))
+    (every? #(= (expmod % x x) %) (range 1 x))))
 
+;1.27 test
+(deftest test-1-27
+  (is (= true (carmichael? 561))
+      (= false (carmichael? 562))))
+(test-1-27)
+
+;1.28
 
