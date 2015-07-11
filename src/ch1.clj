@@ -207,4 +207,23 @@
 (test-1-27)
 
 ;1.28
+(defn miller-robin-expmod [a n m]
+  (cond (= n 0) 1
+        (even? n) (let [itr (miller-robin-expmod a (halve n) m)
+                        sqr (square itr)]
+                    (if (and (not= itr 1)
+                             (not= itr (dec m))
+                             (= 1 (rem sqr m)))
+                      0
+                      (rem sqr m)))
+        :ekse (rem (* a (miller-robin-expmod a (dec n) m)) m)))
+(defn miller-robin-test [n]
+  (= (miller-robin-expmod (inc (rand-int (dec n))) (dec n) n) 1))
+(defn miller-robin-prime? [n times]
+  (if (= times 0) true
+    (if (miller-robin-test n) (miller-robin-prime? n (dec times)) false)))
 
+;1.28 test
+(deftest test-1-28
+  (is (= false (miller-robin-prime? 561 3))
+      (= true (miller-robin-prime? 100 3))))
