@@ -8,6 +8,7 @@
 (defn square [x] (* x x))
 (defn mydouble [x] (+ x x))
 (defn halve [x] (/ x 2))
+(defn cube [x] (* x x x))
 
 ;1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
@@ -234,4 +235,11 @@
     (+ (term a)
       (sum term (next a) next b))))
 (defn simp-integral [f a b n]
-  )
+     (let [h (/ (- b a) n)]
+       (letfn [(g [x] (f (+ a (* x h))))
+               (myterm [x]
+                 (* (g x) (if (even? x) 2 4)))]
+         (/ (* h (+ (f a) (f b) (sum myterm 1 inc (dec n)))) 3))))
+
+;(tt (simp-integral cube 0 1 100))
+
