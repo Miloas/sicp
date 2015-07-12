@@ -85,11 +85,11 @@
 
 ;1.16
 (defn fast-exp-iter [b n]
-  (letfn [(help [a b n]
+  ((fn help [a b n]
           (cond (= n 0) a
                 (even? n) (help a (square b) (halve n))
-                :else (help (* a b) b (dec n))))]
-    (help 1 b n)))
+                :else (help (* a b) b (dec n))))
+     1 b n))
 
 ;1.16 test
 (deftest test-1-16
@@ -111,11 +111,11 @@
 
 ;1.18
 (defn fast-mult-iter [a b]
-  (letfn [(help [a b result]
+  ((fn help [a b result]
             (cond (or (= b 1) (= b 0) (= a 0)) result
               (even? b) (help (mydouble a) (halve b) result)
-              :else (help a (- b 1) (+ result a))))]
-    (help a b 0)))
+              :else (help a (- b 1) (+ result a))))
+    a b 0))
 
 ;1.18
 (deftest test-1-18
@@ -137,11 +137,11 @@
 (defn divides? [a b]
   (= (rem b a) 0))
 (defn smallest-divisor [n]
-  (letfn [(find-divisor [n test-divisor]
+  ((fn find-divisor [n test-divisor]
             (cond (> (square test-divisor) n) n
               (divides? test-divisor n) test-divisor
-              :else (find-divisor n (inc test-divisor))))]
-    (find-divisor n 2)))
+              :else (find-divisor n (inc test-divisor))))
+    n 2))
 (defn prime? [n]
   (= n (smallest-divisor n)))
 (defn prime-interval [l r]
@@ -181,9 +181,8 @@
         (even? n) (rem (square (expmod a (halve n) m)) m)
         :else (rem (* a (expmod a (dec n) m)) m)))
 (defn fermat-test [x]
-  (letfn [(try-it [a]
-            (= (expmod a x x) a))]
-    (try-it (inc (rand-int (dec x))))))
+  ((fn [a] (= (expmod a x x) a))
+    (inc (rand-int (dec x)))))
 (defn fast-prime? [x times]
   (cond (= times 0) true
         (fermat-test x) (fast-prime? x (dec times))
@@ -227,3 +226,12 @@
 (deftest test-1-28
   (is (= false (miller-robin-prime? 561 3))
       (= true (miller-robin-prime? 100 3))))
+
+;1.29
+(defn sum [term a next b]
+  (if (> a b)
+    0
+    (+ (term a)
+      (sum term (next a) next b))))
+(defn simp-integral [f a b n]
+  )
