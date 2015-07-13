@@ -144,7 +144,9 @@
               :else (find-divisor n (inc test-divisor))))
     n 2))
 (defn prime? [n]
-  (= n (smallest-divisor n)))
+  (if (= n 1)
+    false
+    (= n (smallest-divisor n))))
 (defn prime-interval [l r]
   "If can't find return r+1"
   (cond (= l (inc r)) (inc r)
@@ -303,5 +305,16 @@
 (test-1-32)
 
 ;1.33
+(defn sum-prime-interval [a b]
+  (reduce + (filter prime? (range a b))))
+(defn gcd [a b]
+  (if (= b 0) a (gcd b (rem a b))))
+(defn sum-prime-smaller [n]
+  (reduce + (filter prime? (range n))))
 
+;1.33 test
+(deftest test-1-33
+  (is (= 17 (sum-prime-interval 1 10))
+      (= 17 (sum-prime-smaller 10))))
+(test-1-33)
 
