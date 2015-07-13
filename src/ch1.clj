@@ -243,3 +243,14 @@
 
 ;(tt (simp-integral cube 0 1 100))
 
+;1.30
+(defn sum-iter [term a next b]
+  (loop [a a
+         acc 0]
+    (if (> a b) acc
+      (recur (next a) (+ acc (term a))))))
+
+;1.30 test
+(deftest test-1-30
+  (is (= (sum cube 1 inc 10) (sum-iter cube 1 inc 10))))
+(test-1-30)
