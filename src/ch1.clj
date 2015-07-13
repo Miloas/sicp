@@ -277,7 +277,31 @@
 ;1.31 test
 (deftest test-1-31
   (is (= 120 (factorial 5))
-    (= (product-iter identity 1 inc 5) (product identity 1 inc 5))))
+      (= (product-iter identity 1 inc 5) (product identity 1 inc 5))))
 (test-1-31)
+
+;1.32
+(defn accumulate [combiner null-value term a next b]
+  (if (> a b)
+    null-value
+    (combiner (term a) (accumulate combiner null-value term (next a) next b))))
+(defn accumulate-iter [combiner null-value term a next b]
+  (loop [a a
+         result null-value]
+    (if (> a b)
+      result
+      (recur (next a) (combiner result (term a))))))
+(defn sum-acc [term a next b]
+  (accumulate-iter + 0 term a next b))
+(defn product-acc [term a next b]
+  (accumulate-iter * 1 term a next b))
+
+;1.32 test
+(deftest test-1-32
+  (is (= 55 (sum-acc identity 1 inc 10))
+      (= 120 (product-acc identity 1 inc 5))))
+(test-1-32)
+
+;1.33
 
 
