@@ -233,7 +233,7 @@
   (if (> a b)
     0
     (+ (term a)
-      (sum term (next a) next b))))
+       (sum term (next a) next b))))
 (defn simp-integral [f a b n]
      (let [h (/ (- b a) n)]
        (letfn [(g [x] (f (+ a (* x h))))
@@ -254,3 +254,30 @@
 (deftest test-1-30
   (is (= (sum cube 1 inc 10) (sum-iter cube 1 inc 10))))
 (test-1-30)
+
+;1.31
+(defn product [term a next b]
+  (if (> a b)
+    1
+    (* (term a)
+      (product term (next a) next b))))
+(defn product-iter [term a next b]
+  (loop [a a
+         result 1]
+    (if (> a b) result
+      (recur (next a) (* result (term a))))))
+(defn factorial [n]
+  (product-iter identity 1 inc n))
+(defn cal-pi [n]
+  (letfn [(next [x] (+ x 2))]
+  (let [a (/ (mydouble (product-iter square 4 next (mydouble (inc n)))) (mydouble (inc n)))
+        b (product-iter square 3 next (inc (mydouble n)))]
+    (* 4 (/ a b)))))
+
+;1.31 test
+(deftest test-1-31
+  (is (= 120 (factorial 5))
+    (= (product-iter identity 1 inc 5) (product identity 1 inc 5))))
+(test-1-31)
+
+
