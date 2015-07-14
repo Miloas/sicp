@@ -362,12 +362,22 @@
 ;(tt (cont-frac-iter (fn [_] 1.0) (fn [_] 1.0) 10))
 
 ;1.38
-(+ 2 (cont-frac-iter (fn [_] 1.0)
-           (fn [n]
-             (cond (= n 1) 1
-                   (= n 2) 2
-                   (and (= (rem n 3) 0) (= (rem n 3) 1)) 1
-                   :else (- n (quot n 3)))) 100))
+(def e
+  (+ 2 (cont-frac-iter (fn [_] 1.0)
+            (fn [n]
+              (cond (= n 1) 1
+                    (= n 2) 2
+                    (and (= (rem n 3) 0) (= (rem n 3) 1)) 1
+                    :else (- n (quot n 3)))) 100)))
 
+;1.39
+(defn tan-cf [x k]
+  (letfn [(n [n]
+            (if (= n 1) x (- (square x))))
+          (d [n]
+            (inc (mydouble (dec n))))]
+    (cont-frac-iter n d k)))
+
+;1.40
 
 
