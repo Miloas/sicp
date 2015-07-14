@@ -346,5 +346,20 @@
 (def fixed-point-1-36 (fixed-point #(/ (Math/log 1000) (Math/log %)) 1.1))
 
 ;1.37
+(defn cont-frac [n d k]
+  ((fn help [cnt]
+     (if (= cnt k)
+       (/ (n k) (d k))
+       (/ (n cnt) (+ (d cnt) (help (inc cnt))))))
+    1))
+;(tt (cont-frac (fn [_] 1.0) (fn [_] 1.0) 10))
+(defn cont-frac-iter [n d k]
+  ((fn help [itr result]
+     (if (= itr 0)
+       result
+       (help (dec itr) (/ (n (dec itr)) (+ (d (dec itr)) result)))))
+    k (/ (n k) (d k))))
+;(tt (cont-frac-iter (fn [_] 1.0) (fn [_] 1.0) 10))
 
+;1.38
 
