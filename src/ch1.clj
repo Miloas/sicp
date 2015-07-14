@@ -405,5 +405,18 @@
 (test-1-41)
 
 ;1.42
+(defn compose [f g]
+  (fn [x] (f (g x))))
 
+;1.43
+(defn repeated [f n]
+  (if (= n 1)
+    f
+    (compose f (repeated f (dec n)))))
+
+;1.43 test
+(deftest test-1-43
+  (is (= 625 ((repeated square 2) 5))))
+
+;1.44
 
