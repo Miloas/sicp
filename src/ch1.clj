@@ -427,5 +427,16 @@
   (repeated (smooth f) n))
 
 ;1.45
+(defn average [a b]
+  (halve (+ a b)))
+(defn average-damp [f]
+  (fn [x] (average x (f x))))
+(defn log2 [n]
+  (int (quot (Math/log n) (Math/log 2))))
+(defn n-root [n x]
+  (fixed-point ((repeated average-damp (log2 n))
+                 (fn [y] (/ x (fast-exp-iter y (dec n))))) 1.0))
+
+;1.46
 
 
