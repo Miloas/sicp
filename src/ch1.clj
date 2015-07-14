@@ -355,11 +355,19 @@
 ;(tt (cont-frac (fn [_] 1.0) (fn [_] 1.0) 10))
 (defn cont-frac-iter [n d k]
   ((fn help [itr result]
-     (if (= itr 0)
+     (if (= itr 1)
        result
        (help (dec itr) (/ (n (dec itr)) (+ (d (dec itr)) result)))))
     k (/ (n k) (d k))))
 ;(tt (cont-frac-iter (fn [_] 1.0) (fn [_] 1.0) 10))
 
 ;1.38
+(+ 2 (cont-frac-iter (fn [_] 1.0)
+           (fn [n]
+             (cond (= n 1) 1
+                   (= n 2) 2
+                   (and (= (rem n 3) 0) (= (rem n 3) 1)) 1
+                   :else (- n (quot n 3)))) 100))
+
+
 
