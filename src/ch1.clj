@@ -332,5 +332,19 @@
 (def phi (fixed-point (fn [x] (inc (/ 1 x))) 1.0))
 
 ;1.36
+(defn fixed-point2 [f first-guess]
+  (letfn [(close-enough? [v1 v2]
+            (< (Math/abs (- v1 v2)) tolerance))
+          (try-guess [guess]
+            (println "guess: " guess)
+            (let [next (f guess)]
+              (if (close-enough? guess next)
+                next
+                (try-guess next))))]
+    (try-guess first-guess)))
+
+(def fixed-point-1-36 (fixed-point #(/ (Math/log 1000) (Math/log %)) 1.1))
+
+;1.37
 
 
