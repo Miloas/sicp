@@ -419,4 +419,13 @@
   (is (= 625 ((repeated square 2) 5))))
 
 ;1.44
+(defn smooth [f]
+  (fn [x]
+    (/ (+ (f x) (f (+ x dx)) (f (- x dx))) 3)))
+
+(defn n-smooth [f n]
+  (repeated (smooth f) n))
+
+;1.45
+
 
