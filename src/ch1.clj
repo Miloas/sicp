@@ -379,5 +379,31 @@
     (cont-frac-iter n d k)))
 
 ;1.40
+(def dx 0.00001)
+(defn deriv [g]
+  (fn [x] (/ (- (g (+ x dx)) (g x)) dx)))
+(defn newton-transform [g]
+  (fn [x] (- x (/ (g x) ((deriv g) x)))))
+(defn newtons-method [g guess]
+  (fixed-point (newton-transform g) guess))
+
+(defn cubic [a b c]
+  (fn [x]
+    (+ (cube x)
+       (* a x x)
+       (* b x)
+       c)))
+;(tt (newtons-method (cubic 1 1 1) 1.0))
+
+;1.41
+(defn double-excute [f]
+  (fn [x] (f (f x))))
+
+;1.41 test
+(deftest test-1-41
+  (is (= 3 ((double-excute inc) 1))))
+(test-1-41)
+
+;1.42
 
 
