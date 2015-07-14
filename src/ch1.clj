@@ -438,5 +438,23 @@
                  (fn [y] (/ x (fast-exp-iter y (dec n))))) 1.0))
 
 ;1.46
+(defn iterative-improve [good-enough? improve]
+  (fn [guess]
+    (loop [guess guess]
+      (if (good-enough? guess)
+        guess
+        (recur (improve guess))))))
 
+(defn sqrt2 [x]
+  ((iterative-improve
+    (fn [guess] (< (Math/abs (- (square guess) x)) tolerance))
+    (fn [guess] (average guess (/ x guess))))
+    1.0))
+;(tt (sqrt2 16))
+
+(defn fixed-point3 [f first-guess]
+  ((iterative-improve
+     (fn [guess] (< (Math/abs (- (f guess) guess)) tolerance))
+     (fn [guess] (f guess))) first-guess))
+;(tt (fixed-point3 #(Math/cos %) 1.0))
 
