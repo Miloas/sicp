@@ -50,4 +50,50 @@
   (is (= [2 2] (midpoint-segment (make-segment [1 2] [3 2])))))
 (test-2-2)
 
+;2.3
+
+; y ^
+;   |   -----------
+;   |  |           |
+;   |  |           |
+;   |  |           |
+;   |   -----------
+;   |
+;   O----------------->
+;                     x
+
+(defn make-rec [p1 p2]
+  "p1:left-lower point , p2:right-upper point"
+  [p1 p2])
+(defn get-width [rec]
+  (Math/abs (- (get-x-coordinate (second rec)) (get-x-coordinate (first rec)))))
+(defn get-height [rec]
+  (Math/abs (- (get-y-coordinate (second rec)) (get-y-coordinate (first rec)))))
+
+;(defn make-rec [left lower]
+;  "left:left segment, lower:lower segment"
+;  [left lower])
+;(defn get-width [rec]
+;  (Math/abs (- (get-x-coordinate (get-end-point (second rec))) (get-x-coordinate (get-start-point (second rec))))))
+;(defn get-height [rec]
+;  (Math/abs (- (get-y-coordinate (get-end-point (first rec))) (get-y-coordinate (get-start-point (first rec))))))
+
+
+(defn circumference-rec [rec]
+  (* 2 (+ (get-width rec) (get-height rec))))
+(defn area-rec [rec]
+  (* (get-width rec) (get-height rec)))
+
+;2.3 test
+(deftest test-2-3
+  (is (= 4 (circumference-rec (make-rec [1 1] [2 2])))
+    (= 1 (area-rec (make-rec [1 1] [2 2])))))
+(test-2-3)
+
+;(deftest test-2-3
+;  (is (= 4 (circumference-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1]))))
+;      (= 1 (area-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1]))))
+;    ))
+;(test-2-3)
+
 
