@@ -1,4 +1,5 @@
 ;ch1 solutions
+(ns sicp.ch1)
 
 ;test fn
 (defn tt [x] (println x))
