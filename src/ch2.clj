@@ -87,22 +87,41 @@
 ;2.3 test
 (deftest test-2-3
   (is (= 4 (circumference-rec (make-rec [1 1] [2 2])))
-    (= 1 (area-rec (make-rec [1 1] [2 2])))))
+  (is (= 1 (area-rec (make-rec [1 1] [2 2]))))))
 (test-2-3)
 
 ;(deftest test-2-3
 ;  (is (= 4 (circumference-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1]))))
-;      (= 1 (area-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1]))))
+;  (is (= 1 (area-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1])))))
 ;    ))
 ;(test-2-3)
 
 ;2.4
-(defn cons [x y]
+(defn cons1 [x y]
   (fn [m] (m x y)))
-(defn car [z]
+(defn car1 [z]
   (z (fn [p q] p)))
-(defn cdr [z]
+(defn cdr1 [z]
   (z (fn [p q] q)))
 
+;2.4 test
+(deftest test-2-4
+  (is (= 2 (car1 (cons1 2 3)))
+  (is (= 3 (cdr1 (cons1 2 3))))))
+(test-2-4)
+
+;2.5
+(defn cons2 [x y]
+  (* (Math/pow 2 x)
+     (Math/pow 3 y)))
+(defn divides-cnt [n d]
+  (loop [cnt 0
+         n (int n)]
+    (if (not= (rem n d) 0) cnt
+      (recur (inc cnt) (/ n d)))))
+(defn car2 [z]
+  (divides-cnt z 2))
+(defn cdr2 [z]
+  (divides-cnt z 3))
 
 
