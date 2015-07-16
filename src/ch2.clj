@@ -132,17 +132,16 @@
 (test-2-5)
 
 ;2.6
-(def one
+(def one-church
   (fn [f] (fn [x] (f x))))
-(def two
+(def two-church
   (fn [f] (fn [x] (f (f x)))))
-(defn repeated [f n]
-  (loop [ret f
-         n   n]
-    (if (= n 1) ret
-      (recur (comp ret ret) (dec n)))))
-(defn add [m n]
-  (fn [f] (fn [x] ((repeated f (+ m n)) x))))
+(defn add-church [m n]
+  (fn [f] (fn [x] ((m f) ((n f) x)))))
+(defn mul-church [m n]
+  (fn [f] (fn [x] ((m (n f)) x))))
+(defn pow-church [m n]
+  (fn [f] (fn [x] (((m n) f) x))))
 
 
 
