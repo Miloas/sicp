@@ -5,6 +5,7 @@
 (defn tt [x] (println x))
 (use 'clojure.test)
 
+
 ;2.1
 (defn gcd [a b]
   (if (= b 0) a (gcd b (rem a b))))
@@ -131,6 +132,17 @@
 (test-2-5)
 
 ;2.6
+(def one
+  (fn [f] (fn [x] (f x))))
+(def two
+  (fn [f] (fn [x] (f (f x)))))
+(defn repeated [f n]
+  (loop [ret f
+         n   n]
+    (if (= n 1) ret
+      (recur (comp ret ret) (dec n)))))
+(defn add [m n]
+  (fn [f] (fn [x] ((repeated f (+ m n)) x))))
 
 
 
