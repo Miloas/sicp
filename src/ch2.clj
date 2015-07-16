@@ -124,4 +124,13 @@
 (defn cdr2 [z]
   (divides-cnt z 3))
 
+;2.5 test
+(deftest test-2-5
+  (is (= 2 (car2 (cons2 2 3)))
+  (is (= 3 (cdr2 (cons2 2 3))))))
+(test-2-5)
+
+;2.6
+
+
 
