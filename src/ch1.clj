@@ -195,7 +195,7 @@
 ;1.24 test
 (deftest test-1-24
   (is (= true (fast-prime? 101 3))
-  (is (= false (fast-prime? 4 1)))))
+  (is (= false (fast-prime? 4 3)))))
 (test-1-24)
 
 ;1.27
