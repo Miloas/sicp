@@ -158,7 +158,7 @@
 ;1.22 test
 (deftest test-1-22
   (is (= 2 (prime-interval 2 3))
-      (= 23 (prime-interval 20 30))))
+  (is (= 23 (prime-interval 20 30)))))
 (test-1-22)
 
 ;1.23
@@ -195,7 +195,7 @@
 ;1.24 test
 (deftest test-1-24
   (is (= true (fast-prime? 101 3))
-      (= false (fast-prime? 4 1))))
+  (is (= false (fast-prime? 4 1)))))
 (test-1-24)
 
 ;1.27
@@ -206,7 +206,7 @@
 ;1.27 test
 (deftest test-1-27
   (is (= true (carmichael? 561))
-      (= false (carmichael? 562))))
+  (is (= false (carmichael? 562)))))
 (test-1-27)
 
 ;1.28
@@ -280,7 +280,7 @@
 ;1.31 test
 (deftest test-1-31
   (is (= 120 (factorial 5))
-      (= (product-iter identity 1 inc 5) (product identity 1 inc 5))))
+  (is (= (product-iter identity 1 inc 5) (product identity 1 inc 5)))))
 (test-1-31)
 
 ;1.32
@@ -302,7 +302,7 @@
 ;1.32 test
 (deftest test-1-32
   (is (= 55 (sum-acc identity 1 inc 10))
-      (= 120 (product-acc identity 1 inc 5))))
+  (is (= 120 (product-acc identity 1 inc 5)))))
 (test-1-32)
 
 ;1.33
@@ -316,7 +316,7 @@
 ;1.33 test
 (deftest test-1-33
   (is (= 17 (sum-prime-interval 1 10))
-      (= 17 (sum-prime-smaller 10))))
+  (is (= 17 (sum-prime-smaller 10)))))
 (test-1-33)
 
 ;1.35
