@@ -147,15 +147,39 @@
 (defn make-interval [x y]
   [x y])
 (defn upper-bound [interval]
-  (apply max interval))
+  (second interval))
 (defn lower-bound [interval]
-  (apply min interval))
+  (first interval))
 
 ;2.7 test
 (deftest test-2-7
   (is (= 3 (upper-bound (make-interval 2 3))))
   (is (= 2 (lower-bound (make-interval 2 3)))))
 (test-2-7)
+
+;2.8
+(defn sub-interval [x y]
+  (make-interval (- (lower-bound x) (upper-bound y))
+                 (- (upper-bound x) (lower-bound y))))
+
+;2.9
+(defn mul-interval [x y]
+  (let [p1 (* (lower-bound x) (lower-bound y))
+        p2 (* (lower-bound x) (upper-bound y))
+        p3 (* (upper-bound x) (lower-bound y))
+        p4 (* (upper-bound x) (upper-bound y))]
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+(defn div-interval [x y]
+  (mul-interval x
+    (let [a (upper-bound y)
+          b (lower-bound y)]
+      (if (> (* a b) 0)
+        (make-interval (/ 1.0 a) (/ 1.0 b))
+        (throw (Exception. "除数不能为0"))))))
+
+;2.12
+
 
 
 
