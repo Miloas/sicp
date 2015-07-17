@@ -143,5 +143,19 @@
 (defn pow-church [m n]
   (fn [f] (fn [x] (((m n) f) x))))
 
+;2.7
+(defn make-interval [x y]
+  [x y])
+(defn upper-bound [interval]
+  (apply max interval))
+(defn lower-bound [interval]
+  (apply min interval))
+
+;2.7 test
+(deftest test-2-7
+  (is (= 3 (upper-bound (make-interval 2 3))))
+  (is (= 2 (lower-bound (make-interval 2 3)))))
+(test-2-7)
+
 
 
