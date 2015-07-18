@@ -183,13 +183,13 @@
 ()
 
 ;2.17
-(defn last-pair-iter [coll]
-  (loop [[x & xs] coll]
+(defn last-pair-iter [lst]
+  (loop [[x & xs] lst]
     (if xs (recur xs) (list x))))
-(defn last-pair-recur [coll]
-  (if (next coll) (recur (next coll)) (list (first coll))))
-(defn last-pair [coll]
-  (list (last coll)))
+(defn last-pair-recur [lst]
+  (if (next lst) (recur (rest lst)) (list (first lst))))
+(defn last-pair [lst]
+  (list (last lst)))
 
 ;2.17 test
 (deftest test-2-17
@@ -197,7 +197,17 @@
   (is (= (last-pair '(3 4 1)) (last-pair-recur '(3 4 1)))))
 (test-2-17)
 
+;2.18
+(defn myreverse [lst]
+  (loop [lst lst
+         acc  '()]
+    (if (last lst) (recur (rest lst) (conj acc (first lst))) acc)))
 
+
+;2.18 test
+(deftest test-2-18
+  (is (= '(3 2 1) (myreverse '(1 2 3)))))
+(test-2-18)
 
 
 
