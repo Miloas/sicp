@@ -183,13 +183,13 @@
 ()
 
 ;2.17
-(defn last-pair-iter [lst]
-  (loop [[x & xs] lst]
+(defn last-pair-iter [items]
+  (loop [[x & xs] items]
     (if xs (recur xs) (list x))))
-(defn last-pair-recur [lst]
-  (if (next lst) (recur (rest lst)) (list (first lst))))
-(defn last-pair [lst]
-  (list (last lst)))
+(defn last-pair-recur [items]
+  (if (next items) (recur (rest items)) (list (first items))))
+(defn last-pair [items]
+  (list (last items)))
 
 ;2.17 test
 (deftest test-2-17
@@ -198,10 +198,10 @@
 (test-2-17)
 
 ;2.18
-(defn myreverse [lst]
-  (loop [lst lst
+(defn myreverse [items]
+  (loop [items items
          acc  '()]
-    (if (last lst) (recur (rest lst) (conj acc (first lst))) acc)))
+    (if items (recur (next items) (conj acc (first items))) acc)))
 
 ;2.18 test
 (deftest test-2-18
@@ -209,12 +209,12 @@
 (test-2-18)
 
 ;2.19
-(defn first-denomination [lst]
-  (first lst))
-(defn except-first-denomination [lst]
-  (rest lst))
-(defn no-more? [lst]
-  (last lst))
+(defn first-denomination [items]
+  (first items))
+(defn except-first-denomination [items]
+  (rest items))
+(defn no-more? [items]
+  (next items))
 
 ;2.20
 (defn same-parity [x & xs]
@@ -225,6 +225,23 @@
   (is (= '(1 3 5 7) (same-parity 1 2 3 4 5 6 7))))
 (test-2-20)
 
+;2.21
+(defn square [x] (* x x))
+(defn square-list1 [items]
+  (if (nil? items)
+    nil
+    (cons (square (first items)) (square-list1 (next items)))))
+(defn square-list2 [items]
+  (map square items))
+
+;2.21 test
+(deftest test-2-21
+  (is (= (square-list1 '(1 2 3)) (square-list2 '(1 2 3)))))
+(test-2-21)
+
+;2.23
+(defn for-each [f items]
+  (doseq [x items] (f x)))
 
 
 
