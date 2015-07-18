@@ -243,5 +243,16 @@
 (defn for-each [f items]
   (doseq [x items] (f x)))
 
+;2.27
+(defn deep-reverse [items]
+  (if (list? items)
+    (map deep-reverse (reverse items))
+    items))
+
+;2.27 test
+(deftest test-2-27
+  (is (= '((4 3) (2 1)) (deep-reverse '((1 2) (3 4))))))
+(test-2-27)
+
 
 
