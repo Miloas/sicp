@@ -179,6 +179,25 @@
         (throw (Exception. "除数不能为0"))))))
 
 ;2.12
+;What's the 2.12 meaning ?
+()
+
+;2.17
+(defn last-pair-iter [coll]
+  (loop [[x & xs] coll]
+    (if xs (recur xs) (list x))))
+(defn last-pair-recur [coll]
+  (if (next coll) (recur (next coll)) (list (first coll))))
+(defn last-pair [coll]
+  (list (last coll)))
+
+;2.17 test
+(deftest test-2-17
+  (is (= (last-pair '(1 2 3)) (last-pair-iter '(1 2 3))))
+  (is (= (last-pair '(3 4 1)) (last-pair-recur '(3 4 1)))))
+(test-2-17)
+
+
 
 
 
