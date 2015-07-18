@@ -203,11 +203,27 @@
          acc  '()]
     (if (last lst) (recur (rest lst) (conj acc (first lst))) acc)))
 
-
 ;2.18 test
 (deftest test-2-18
   (is (= '(3 2 1) (myreverse '(1 2 3)))))
 (test-2-18)
+
+;2.19
+(defn first-denomination [lst]
+  (first lst))
+(defn except-first-denomination [lst]
+  (rest lst))
+(defn no-more? [lst]
+  (last lst))
+
+;2.20
+(defn same-parity [x & xs]
+  (cons x (filter (if (even? x) even? odd?) xs)))
+
+;2.20 test
+(deftest test-2-20
+  (is (= '(1 3 5 7) (same-parity 1 2 3 4 5 6 7))))
+(test-2-20)
 
 
 
