@@ -254,5 +254,22 @@
   (is (= '((4 3) (2 1)) (deep-reverse '((1 2) (3 4))))))
 (test-2-27)
 
+;2.28
+(defn fringe [tree]
+  (flatten tree))
+(defn fringe2 [x & tree]
+  "apply can expand nested list.
+   example: (max [1 2 3]) will error,
+   but (apply max [1 2 3]) works"
+  (concat (if (seq? x) (apply fringe2 x) (list x))
+          (if (nil? tree) nil (apply fringe2 tree))))
+
+;2.28 test
+(deftest test-2-28
+  (let [x '((1 2) (3 4))]
+    (is (= '(1 2 3 4 1 2 3 4) (fringe2 (list x x))))))
+(test-2-28)
+
+
 
 
