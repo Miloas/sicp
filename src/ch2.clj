@@ -270,6 +270,30 @@
     (is (= '(1 2 3 4 1 2 3 4) (fringe2 (list x x))))))
 (test-2-28)
 
-
+;2.29
+(defn make-mobile [left right]
+  (list left right))
+(defn make-branch [length structure]
+  (list length structure))
+; a)
+(defn left-branch [mobile]
+  (first mobile))
+(defn right-branch [mobile]
+  (second mobile))
+(defn branch-length [branch]
+  (first branch))
+(defn branch-structure [branch]
+  (second branch))
+; b)
+(defn total-weight [mobile]
+  (if (list? mobile)
+    (let [l-structure (branch-structure (left-branch mobile))
+          r-structure (branch-structure (right-branch mobile))]
+      (+ (if (list? l-structure) (total-weight l-structure) l-structure)
+         (if (list? r-structure) (total-weight r-structure) r-structure)))
+    mobile))
+; c)
+(defn mobile-balanced? [mobile]
+  )
 
 
