@@ -4,6 +4,7 @@
 ;test fn
 (defn tt [x] (println x))
 (use 'clojure.test)
+(use 'clojure.set)
 
 
 ;2.1
@@ -321,5 +322,35 @@
   (is (= '(1 (4 (9 16) 25)) (square-tree (list 1 (list 2 (list 3 4) 5)))))
   (is (= '(1 (4 (9 16) 25)) (square-tree2 (list 1 (list 2 (list 3 4) 5))))))
 (test-2-30)
+
+;2.31
+(defn tree-map [f tree]
+  (if (list? tree)
+    (map #(tree-map f %) tree)
+    (f tree)))
+(defn square-tree3 [tree]
+  (tree-map square tree))
+
+;2.31 test
+(deftest test-2-31
+  (is (= '(1 (4 (9 16) 25)) (square-tree3 (list 1 (list 2 (list 3 4) 5))))))
+(test-2-31)
+
+;2.32
+(defn subsets [s]
+  (if (nil? s) '(())
+    (let [rest-s (subsets (next s))]
+      (concat rest-s (map #(cons (first s) %) rest-s)))))
+
+;2.32 test
+(deftest test-2-32
+  "set A = set B means : A is the subset of B and B is the subset of A .
+   In Clojure , method 'set' can translate list and vector to set data
+   structure"
+  (let [test-data '(() (1) (2) (3) (1 2) (1 3) (2 3) (1 2 3))]
+    (is (= true (subset? test-data (set (subsets '(1 2 3))))))
+    (is (= true (subset? (subsets '(1 2 3)) (set test-data))))))
+(test-2-32)
+
 
 
