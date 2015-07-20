@@ -303,5 +303,23 @@
            (mobile-balanced? (branch-structure r))))))
 
 
+;2.30
+(defn square-tree [tree]
+  (if (list? tree)
+    (cons
+      (square-tree (first tree))
+      (square-tree (next tree)))
+    (if (nil? tree) '() (square tree))))
+
+(defn square-tree2 [tree]
+  (if (list? tree)
+    (map square-tree2 tree)
+    (square tree)))
+
+;2.30 test
+(deftest test-2-30
+  (is (= '(1 (4 (9 16) 25)) (square-tree (list 1 (list 2 (list 3 4) 5)))))
+  (is (= '(1 (4 (9 16) 25)) (square-tree2 (list 1 (list 2 (list 3 4) 5))))))
+(test-2-30)
 
 
