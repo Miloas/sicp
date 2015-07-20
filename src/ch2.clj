@@ -373,3 +373,13 @@
   (is (= (count '(1 2 3)) (length-by-accumulate '(1 2 3)))))
 (test-2-33)
 
+;2.34
+(defn horner-eval [x coefficient-list]
+  (let [temp (reverse coefficient-list)]
+    (reduce #(+ %2 (* x %1)) (first temp) (rest temp))))
+
+;2.34 test
+(deftest test-2-34
+  (is (= 79 (horner-eval 2 '(1 3 0 5 0 1)))))
+(test-2-34)
+
