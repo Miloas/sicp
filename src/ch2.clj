@@ -294,6 +294,14 @@
     mobile))
 ; c)
 (defn mobile-balanced? [mobile]
-  )
+  (if (list? mobile)
+    (let [l (left-branch mobile)
+          r (right-branch mobile)]
+      (and (= (* (branch-length l) (total-weight (branch-structure l)))
+              (* (branch-length r) (total-weight (branch-structure r))))
+           (mobile-balanced? (branch-structure l))
+           (mobile-balanced? (branch-structure r))))))
+
+
 
 
