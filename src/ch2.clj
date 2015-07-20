@@ -352,5 +352,24 @@
     (is (= true (subset? (subsets '(1 2 3)) (set test-data))))))
 (test-2-32)
 
-
+;2.33
+;It's interesting. accumulate method in Haskell is fold,
+;but in Clojure is reduce
+(defn map-by-accumulate [f coll]
+  "Method 'cons' require two arguments, it append first argument in
+   second argument from head"
+  "Method 'conj' acquire any arguments,
+   In list: It head insert into first arugument from second argument to end argument
+   In vector: It tail insert into ..."
+  (reduce #(cons (f %2) %1) '() (reverse coll)))
+(defn append-by-accumulate [seq1 seq2]
+  (reduce #(cons %2 %1) seq2 (reverse seq1)))
+(defn length-by-accumulate [coll]
+  (reduce (fn [acc item] (inc acc)) 0 coll))
+;2.33 test
+(deftest test-2-33
+  (is (= (map square '(1 2 3)) (map-by-accumulate square '(1 2 3))))
+  (is (= (concat '(2 7 8) '(3 2 1)) (append-by-accumulate '(2 7 8) '(3 2 1))))
+  (is (= (count '(1 2 3)) (length-by-accumulate '(1 2 3)))))
+(test-2-33)
 
