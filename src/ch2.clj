@@ -354,7 +354,7 @@
 
 ;2.33
 ;It's interesting. accumulate method in Haskell is fold,
-;but in Clojure is reduce
+;but in Clojure is reduce (Haskell foldl)
 (defn map-by-accumulate [f coll]
   "Method 'cons' require two arguments, it append first argument in
    second argument from head"
@@ -382,4 +382,36 @@
 (deftest test-2-34
   (is (= 79 (horner-eval 2 '(1 3 0 5 0 1)))))
 (test-2-34)
+
+;2.35
+(defn count-leaves [tree]
+  (reduce + 0 (map #(if (list? %) (count-leaves %) 1) tree)))
+
+;2.35 test
+;
+;     (1((1 2)1))
+;      /       \
+;     1     ((1 2)1)
+;            /    \
+;         (1 2)    1
+;         /   \
+;        1     2
+;
+(deftest test-2-35
+  (is (= 4 (count-leaves '(1 ((1 2) 1))))))
+(test-2-35)
+
+;2.36
+(defn accumulate-n [op init seqs]
+  (if (nil? (first seqs))
+    nil
+    (cons (reduce op init (map first seqs))
+      (accumulate-n op init (map next seqs)))))
+
+;2.36 test
+(deftest test-2-36
+  (is (= '(22 26 30) (accumulate-n + 0 '((1 2 3) (4 5 6) (7 8 9) (10 11 12))))))
+(test-2-36)
+
+;2.37
 
