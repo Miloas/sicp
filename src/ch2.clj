@@ -402,11 +402,21 @@
 (test-2-35)
 
 ;2.36
+(defn accumulate [op init seqs]
+  "In Clojure , method 'reduce' is foldl in Haskell.
+   We implement function 'accumulate' and make it work as foldr.
+          foldl: (f init (f %1 (f %2 ... (f %n) ... )
+          foldr: (f %1 (f %2 (f %3 ... (f init) ... )
+   "
+  (if (nil? seqs)
+    init
+    (op (first seqs)
+        (accumulate op init (next seqs)))))
 (defn accumulate-n [op init seqs]
   (if (nil? (first seqs))
     nil
-    (cons (reduce op init (map first seqs))
-      (accumulate-n op init (map next seqs)))))
+    (cons (accumulate op init (map first seqs))
+          (accumulate-n op init (map next seqs)))))
 
 ;2.36 test
 (deftest test-2-36
@@ -414,4 +424,18 @@
 (test-2-36)
 
 ;2.37
+(defn dot-product [v w]
+  (accumulate + 0 (map * v w)))
+(defn matrix-*-vector [m v]
+  (map #(dot-product v %) m))
+(defn transpose [mat]
+  (accumulate-n cons nil mat))
+(defn matrix-*-matrix [m n]
+  (let [cols (transpose n)]
+    (map (fn [row] (map #(dot-product row %) cols)) m)))
 
+;2.37 test
+(deftest test-2-37
+  (let [m '((1 2 3) (4 5 6) (7 8 9))]
+  (is (= '((30 36 42) (66 81 96) (102 126 150)) (matrix-*-matrix m m)))))
+(test-2-37)
