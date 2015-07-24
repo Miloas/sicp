@@ -478,3 +478,36 @@
   (is (= '((1 2 3)) (solver-2-41 4 6))))
 (test-2-41)
 
+;2.42
+(def empty-board nil)
+(defn safe? [k pos]
+  (let [cols (range 1 (inc k))
+        a (map + pos cols)
+        b (map - pos cols)
+        sz (count pos)]
+    (and (= (count (distinct pos)) sz)
+         (= (count (distinct a)) sz)
+         (= (count (distinct b)) sz))))
+(defn adjoin-position [row col queens]
+  (cons row queens))
+(defn queens [board-size]
+  (defn queen-cols [k]
+            (if (= k 0)
+              (list empty-board)
+              (filter
+                #(safe? k %)
+                (mapcat
+                  (fn [rest-of-queeens]
+                    (map (fn [new-rows]
+                           (adjoin-position new-rows k rest-of-queeens))
+                      (range 1 (inc board-size))))
+                  (queen-cols (dec k))))))
+  (queen-cols board-size))
+
+;2.42 test
+(deftest test-2-42
+  (is (= 92 (count (queens 8)))))
+(test-2-42)
+
+
+
