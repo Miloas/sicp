@@ -403,10 +403,10 @@
 
 ;2.36
 (defn accumulate [op init seqs]
-  "In Clojure , method 'reduce' is foldl in Haskell.
+  "In Clojure , method 'reduce' is foldl like Haskell.
    We implement function 'accumulate' and make it work as foldr.
-          foldl: (f init (f %1 (f %2 ... (f %n) ... )
-          foldr: (f %1 (f %2 (f %3 ... (f init) ... )
+          foldr: f y1 (f y2 (... (f yk x) ...))
+          foldl: f (... (f (f x y1) y2) ...) yk
    "
   (if (nil? seqs)
     init
@@ -437,5 +437,20 @@
 ;2.37 test
 (deftest test-2-37
   (let [m '((1 2 3) (4 5 6) (7 8 9))]
-  (is (= '((30 36 42) (66 81 96) (102 126 150)) (matrix-*-matrix m m)))))
+    (is (= '((30 36 42) (66 81 96) (102 126 150)) (matrix-*-matrix m m)))))
 (test-2-37)
+
+;2.39
+(tt (concat nil '(1)))
+(defn reverse-foldl [seqs]
+  (reduce #(cons %2 %1) nil seqs))
+(defn reverse-foldr [seqs]
+  "(concat nil x) equal x"
+  (accumulate #(concat %2 (list %1)) nil seqs))
+
+;2.39 test
+(deftest test-2-39
+  (let [test-data '(1 7 2 9)]
+    (is (= (reverse test-data) (reverse-foldl test-data)))
+    (is (= (reverse test-data) (reverse-foldr test-data)))))
+(test-2-39)
