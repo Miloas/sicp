@@ -441,7 +441,6 @@
 (test-2-37)
 
 ;2.39
-(tt (concat nil '(1)))
 (defn reverse-foldl [seqs]
   (reduce #(cons %2 %1) nil seqs))
 (defn reverse-foldr [seqs]
@@ -454,3 +453,28 @@
     (is (= (reverse test-data) (reverse-foldl test-data)))
     (is (= (reverse test-data) (reverse-foldr test-data)))))
 (test-2-39)
+
+;2.40
+(defn unique-pairs [n]
+  (mapcat (fn [x] (map #(list % x) (range 1 (inc x)))) (range 1 (inc n))))
+
+;2.40 test
+(deftest test-2-40
+  (is (= '((1 1) (1 2) (2 2) (1 3) (2 3) (3 3) (1 4) (2 4) (3 4) (4 4)) (unique-pairs 4))))
+(test-2-40)
+
+;2.41
+(defn unique-triples [n]
+  (for [x (range 1 (inc n))
+        y (range (inc x) (inc n))
+        z (range (inc y) (inc n))]
+    (list x y z)))
+(defn solver-2-41 [n s]
+  (filter #(= s (reduce + 0 %)) (unique-triples n)))
+
+;2.41 test
+(deftest test-2-41
+  (is (= '((1 2 3) (1 2 4) (1 3 4) (2 3 4)) (unique-triples 4)))
+  (is (= '((1 2 3)) (solver-2-41 4 6))))
+(test-2-41)
+
