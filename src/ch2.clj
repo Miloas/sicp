@@ -509,5 +509,19 @@
   (is (= 92 (count (queens 8)))))
 (test-2-42)
 
+;2.54
+(defn equal? [seq1 seq2]
+  (if (and (not (list? seq1)) (not (list? seq2))) (= seq1 seq2)
+    (if (and (list? seq1) (list? seq2))
+      (and (equal? (first seq1) (first seq2)) (equal? (next seq1) (next seq2)))
+      false)))
+
+;2.54 test
+(deftest test-2-54
+  (is (= true (equal? '(this is a list) '(this is a list))))
+  (is (= false (equal? '(this is a list) '(this (is a) list))))
+  (is (= false (equal? '(this is a list) '(this is a vector)))))
+(test-2-54)
+
 
 
