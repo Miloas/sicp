@@ -523,7 +523,7 @@
   (is (= false (equal? '(this is a list) '(this is a vector)))))
 (test-2-54)
 
-;2.56
+;2.56 and 2.57
 (def variable? symbol?)
 (def same-variable? #(and (variable? %1)
                           (variable? %2)
@@ -532,16 +532,17 @@
   (and (number? exp)
        (= exp num)))
 
-(def sum? #(and (list? %) (= (first %) '+)))
+(def sum? #(and (seq? %) (= (first %) '+)))
 (def addend second)
-(def augend #(nth % 2))
+(defn augend [seqs]
+  (if (= (count seqs) 3) (nth seqs 2) (concat '(+) (next (next seqs)))))
 (defn make-sum [a1 a2]
   (cond (=number? a1 0) a2
         (=number? a2 0) a1
         (and (number? a1) (number? a2)) (+ a1 a2)
         :else (list '+ a1 a2)))
 
-(def product? #(and (list? %) (= (first %) '*)))
+(def product? #(and (seq? %) (= (first %) '*)))
 (def multipiler addend)
 (def multiplicand augend)
 (defn make-product [m1 m2]
@@ -553,7 +554,7 @@
         (and (number? m1) (number? m2)) (* m1 m2)
         :else (list '* m1 m2)))
 
-(def exponentiation? #(and (list? %) (= (first %) '**)))
+(def exponentiation? #(and (seq? %) (= (first %) '**)))
 (def base addend)
 (def exponent augend)
 (defn make-exponentiation [b n]
@@ -570,11 +571,12 @@
         (exponentiation? exp) (make-product (exponent exp)
                                 (make-product (make-exponentiation (base exp) (dec (exponent exp)))
                                   (deriv (base exp) var)))
-    :else (throw (Exception. (format "unknow expression type %s DERUV" exp)))))
+        :else (throw (Exception. (format "unknow expression type %s DERUV" exp)))))
 
 ;2.56 test
 (deftest test-2-56
-  (is (= '(* 9 (** x 2)) (deriv '(* 3 (** x 3)) 'x))))
+  (is (= '(* 9 (** x 2)) (deriv '(* 3 (** x 3)) 'x)))
+  (is (= 3 (deriv '(+ x x x) 'x))))
 (test-2-56)
 
 
