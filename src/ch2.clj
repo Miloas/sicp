@@ -579,4 +579,27 @@
   (is (= 3 (deriv '(+ x x x) 'x))))
 (test-2-56)
 
+;2.59
+(defn element-of-set? [x set]
+  (some #(= x %) set))
+(defn adjoin-set [x set]
+  (if (element-of-set? x set) set (cons x set)))
+(defn union-set [set1 set2]
+  (reduce #(adjoin-set %2 %1) set1 set2))
 
+;2.59 test
+(deftest test-2-59
+  (is (= (set '(1 2 3 4)) (set (union-set '(1 2 3) '(3 4))))))
+(test-2-59)
+
+;2.60
+(defn element-of-multiset? [x multiset]
+  (some #(= x %) set))
+(defn adjoin-multiset [x multiset]
+  (cons x multiset))
+(defn union-multiset [multiset1 multiset2]
+  (reduce %(adjoin-multiset %2 %1) multiset1 multiset2))
+(defn intersection-multiset [multiset1 multiset2]
+  (filter #(element-of-multiset? % set1) set2))
+
+;2.61
