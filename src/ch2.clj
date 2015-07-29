@@ -631,4 +631,33 @@
 (test-2-62)
 
 ;2.65
+(defn entry [tree] (first tree))
+(defn left-branch-tree [tree] (second tree))
+(defn right-branch-tree [tree] (nth tree 3))
+(defn make-tree [entry left right]
+  (list entry left right))
+(defn element-of-tree-set [x set]
+  (cond (nil? set) false
+        (= x (entry set)) true
+        (< x (entry set)) (element-of-tree-set x (left-branch-tree set))
+        :else (element-of-tree-set x (right-branch-tree set))))
+(defn adjoin-tree-set [x set]
+  (cond (nil? set) (make-tree x nil nil)
+    (= x (entry set)) set
+    (< x (entry set)) (make-tree (entry set) (adjoin-tree-set x (left-branch-tree set)) (right-branch-tree set))
+    :else (make-tree (entry set) (left-branch-tree set) (adjoin-tree-set x (right-branch-tree set)))))
+(defn union-tree-set [set1 set2]
+  "Transform set to an sorted list ,and union, last transform unioned list to tree,
+   all of needed method on the book."
+  ())
+(defn intersection-tree-set [set1 set2]
+  "Same as 'union-tree-set' "
+  ())
+
+;2.66
+;Same as method 'elemnt-of-tree-set' ,but we should change the tree structure,
+;((key value) left-branch right-branch), compare the key and return value
+
+
+
 
