@@ -598,8 +598,37 @@
 (defn adjoin-multiset [x multiset]
   (cons x multiset))
 (defn union-multiset [multiset1 multiset2]
-  (reduce %(adjoin-multiset %2 %1) multiset1 multiset2))
+  (reduce #(adjoin-multiset %2 %1) multiset1 multiset2))
 (defn intersection-multiset [multiset1 multiset2]
-  (filter #(element-of-multiset? % set1) set2))
+  (filter #(element-of-multiset? % multiset1) multiset2))
 
 ;2.61
+(defn adjoin-sorted-set [x set]
+  (loop [xx '()
+         yy set]
+    (cond (nil? yy) (conj xx x)
+          (= x (first yy)) (concat xx yy)
+          (< x (first yy)) (concat xx [x] yy)
+          :else (recur (conj (vec xx) (first yy)) (next yy)))))
+
+;2.61 test
+(deftest test-2-61
+  (is (= '(1 2 3 4) (adjoin-sorted-set 3 '(1 2 4))))
+  (is (= '(1 2 3 4) (adjoin-sorted-set 4 '(1 2 3)))))
+(test-2-61)
+
+;2.62
+(defn union-sorted-set [[x & xs :as set1] [y & ys :as set2]]
+  (cond (nil? set1) set2
+        (nil? set2) set1
+        (= x y) (cons x (union-sorted-set xs ys))
+        (> x y) (cons y (union-sorted-set set1 ys))
+        :else   (cons x (union-sorted-set xs set2))))
+
+;2.62 test
+(deftest test-2-62
+  (is (= '(1 2 3 4) (union-sorted-set '(1 2 3) '(2 3 4)))))
+(test-2-62)
+
+;2.65
+
