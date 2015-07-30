@@ -658,6 +658,43 @@
 ;Same as method 'elemnt-of-tree-set' ,but we should change the tree structure,
 ;((key value) left-branch right-branch), compare the key and return value
 
-
+;2.67
+(defn make-leaf [symbol weight]
+  (list 'leaf symbol weight))
+(defn leaf? [obj]
+  (= (first obj) 'leaf))
+(def symbol-leaf (comp first rest))
+(def weight-leaf (comp second rest))
+(def left-huffman-branch first)
+(def right-huffman-branch second)
+(defn symbols [tree]
+  (if (leaf? tree) (list (symbol-leaf tree))
+    (second (rest tree))))
+(defn weight [tree]
+  (if (leaf? tree) (weight-leaf tree)
+    (second (rest (rest tree)))))
+(defn make-code-tree [left right]
+  (list left right (concat (symbols left) (symbols right)) (+ (weight left) (weight right))))
+(defn choose-branch [bit branch]
+  (cond (= bit 0) (left-huffman-branch branch)
+        (= bit 1) (right-huffman-branch branch)
+        :else (throw (IllegalArgumentException. (format "bad bit %d CHOOSE-BRANCH" bit)))))
+(defn decode [bits tree]
+  (loop [bits bits
+         branch tree
+         acc []]
+    (if (nil? bits) acc
+      (let [next-branch (choose-branch (first bits) branch)]
+        (if (leaf? next-branch)
+          (recur (next bits) tree (conj acc (symbol-leaf next-branch)))
+          (recur (next bits) next-branch acc))))))
+(def simple-tree
+  (make-code-tree (make-leaf 'A 4)
+                  (make-code-tree (make-leaf 'B 2)
+                    (make-code-tree (make-leaf 'D 1)
+                      (make-leaf 'C 1)))))
+(def sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+;(tt (decode sample-message simple-tree))
+;=> [A D A B B C £Á£Ý
 
 
