@@ -729,8 +729,8 @@
 ;2.69
 (defn adjoin-huff-set [set x]
   (cond (empty? set) (list x)
-    (< (weight x) (-> set first weight)) (cons x set)
-    :else (cons (first set) (adjoin-huff-set (rest set) x))))
+        (< (weight x) (-> set first weight)) (cons x set)
+        :else (cons (first set) (adjoin-huff-set (rest set) x))))
 (defn make-leaf-set [pairs]
   (reduce #(adjoin-huff-set %1 %2)
              '()
