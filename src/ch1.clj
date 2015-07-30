@@ -2,7 +2,7 @@
 (ns sicp.ch1)
 
 ;test fn
-(defn tt [x] (println x))
+(def tt println)
 (use 'clojure.test)
 
 ;help fn
