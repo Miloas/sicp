@@ -726,4 +726,25 @@
     (is (= message (decode (encode message sample-tree) sample-tree)))))
 (test-2-68)
 
+;2.69
+(defn adjoin-huff-set [set x]
+  (cond (empty? set) (list x)
+    (< (weight x) (-> set first weight)) (cons x set)
+    :else (cons (first set) (adjoin-huff-set (rest set) x))))
+(defn make-leaf-set [pairs]
+  (reduce #(adjoin-huff-set %1 %2)
+             '()
+             pairs))
+(defn successive-merge [leaves]
+  (let [[l r & set] leaves]
+    (if set
+      (recur (adjoin-huff-set set (make-code-tree l r)))
+      (make-code-tree l r))))
+(defn generate-huffman-tree [pairs]
+  (successive-merge (make-leaf-set pairs)))
+
+;2.69 test
+(deftest test-2-69
+  (is (= sample-tree (generate-huffman-tree (list (make-leaf 'A 4) (make-leaf 'B 2) (make-leaf 'D 1) (make-leaf 'C 1))))))
+(test-2-69)
 
