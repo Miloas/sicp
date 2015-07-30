@@ -668,6 +668,8 @@
 (def left-huffman-branch first)
 (def right-huffman-branch second)
 (defn symbols [tree]
+  "Don't use 'nth' in lazy sequence will throw a exception,
+   'concat' will generate a lazy sequence, be careful."
   (if (leaf? tree) (list (symbol-leaf tree))
     (second (rest tree))))
 (defn weight [tree]
@@ -701,3 +703,27 @@
 (test-2-67)
 
 ;2.68
+(defn encode-symbol [symbol tree]
+  (loop [symbol symbol
+         tree tree
+         acc []]
+    (if (leaf? tree)
+      (if (some #(= symbol %) (symbols tree))
+        acc
+        (throw (RuntimeException. "Symbol not in tree.")))
+      (let [left-symbols (symbols (left-huffman-branch tree))
+            right-symbols (symbols (right-huffman-branch tree))]
+        (cond
+          (some #(= symbol %) left-symbols) (recur symbol (left-huffman-branch tree) (conj acc 0))
+          (some #(= symbol %) right-symbols) (recur symbol (right-huffman-branch tree) (conj acc 1))
+          :else (throw (RuntimeException. "Symbol not in tree.")))))))
+(defn encode [message tree]
+  (reduce #(concat %1 (encode-symbol %2 tree)) '() message))
+
+;2.68 test
+(deftest test-2-68
+  (let [message '(A D A B B C A)]
+    (is (= message (decode (encode message sample-tree) sample-tree)))))
+(test-2-68)
+
+
