@@ -688,13 +688,16 @@
         (if (leaf? next-branch)
           (recur (next bits) tree (conj acc (symbol-leaf next-branch)))
           (recur (next bits) next-branch acc))))))
-(def simple-tree
+(def sample-tree
   (make-code-tree (make-leaf 'A 4)
                   (make-code-tree (make-leaf 'B 2)
                     (make-code-tree (make-leaf 'D 1)
                       (make-leaf 'C 1)))))
 (def sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
-;(tt (decode sample-message simple-tree))
-;=> [A D A B B C £Á£İ
 
+;2.67 test
+(deftest test-2-67
+  (is (= '(A D A B B C A) (decode sample-message sample-tree))))
+(test-2-67)
 
+;2.68
