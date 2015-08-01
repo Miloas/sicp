@@ -43,4 +43,27 @@
     (is (= 0 (s 'reset-count)))))
 (test-3-2)
 
+;3.3 and 3.4
+(defn make-acount [amount password]
+  (let [balance (atom amount)
+        count (atom 0)]
+    (fn [secret-password op]
+      (fn [x]
+        (let [call-the-cops (fn [] (println "Cops comming."))]
+        (if (= secret-password password)
+          (cond (= op 'withdraw) (if (>= x @balance)
+                                   (throw (RuntimeException. "Insufficient funds"))
+                                   (swap! balance #(- % x)))
+                (= op 'deposit) (swap! balance #(+ % x))
+                :else (throw (RuntimeException. "Unknow request")))
+          (do
+            (swap! count inc)
+            (when (= @count 7) call-the-cops)
+            (throw (RuntimeException. "Password incorrect")))))))))
 
+;3.3 and 3.4 test
+(deftest test-3-3and4
+  (let [acc (make-acount 100 '123456)]
+    (is (= 60 ((acc '123456 'withdraw) 40)))
+    (is (= 100 ((acc '123456 'deposit) 40)))))
+(test-3-3and4)
