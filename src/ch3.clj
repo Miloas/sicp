@@ -25,3 +25,22 @@
     (is (= 25 (A 10)))))
 (test-3-1)
 
+;3.2
+(defn make-monitored [f]
+  (let [count (atom 0)]
+    (fn [x]
+    (cond (= x 'reset-count) (reset! count 0)
+          (= x 'how-many-calls?) @count
+          :else (do
+                  (swap! count inc)
+                  (f x))))))
+
+;3.2 test
+(deftest test-3-2
+  (let [s (make-monitored #(Math/sqrt %))]
+    (is (= 10.0 (s 100)))
+    (is (= 1 (s 'how-many-calls?)))
+    (is (= 0 (s 'reset-count)))))
+(test-3-2)
+
+
