@@ -5,6 +5,7 @@
 (def tt println)
 (use 'clojure.test)
 
+;try atom
 (def balance (atom 100))
 (defn withdraw [amount]
   (if (>= @balance amount)
@@ -67,3 +68,20 @@
     (is (= 60 ((acc '123456 'withdraw) 40)))
     (is (= 100 ((acc '123456 'deposit) 40)))))
 (test-3-3and4)
+
+;3.5
+(defn monte-carlo [trials experiment]
+  (loop [trials-remaining trials
+         trials-passed 0]
+    (cond (= trials-remaining 0) (/ trials-passed trials)
+          (experiment) (recur (dec trials-remaining) (inc trials-passed))
+          :else (recur (dec trials-remaining) trials-passed))))
+(defn rand-in-range [low high]
+  (+ low (* (Math/random) (- high low))))
+(defn estimate-integral [P x1 y1 x2 y2 trials]
+  (let [area (* (- x2 x1) (- y2 y1))]
+    (* area (monte-carlo trials #(P (rand-in-range x1 x2)
+                                    (rand-in-range y1 y2))))))
+
+;(tt (/ (estimate-integral (fn [x y] (<= (+ (* (- x 5) (- x 5)) (* (- y 7) (- y 7))) 9)) 2 4 8 10 10000) 9))
+
