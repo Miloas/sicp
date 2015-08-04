@@ -85,3 +85,12 @@
 
 ;(tt (/ (estimate-integral (fn [x y] (<= (+ (* (- x 5) (- x 5)) (* (- y 7) (- y 7))) 9)) 2 4 8 10 10000) 9))
 
+;3.7
+(defn make-joint [account password new-password]
+  (do ((account password 'withdraw) 0)
+    (fn [p op]
+      (if (= p new-password)
+        (account password op)
+        (account 'invalid-password op)))))
+
+
