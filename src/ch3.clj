@@ -93,4 +93,23 @@
         (account password op)
         (account 'invalid-password op)))))
 
+;3.24
+;If use Clojure's 'assoc' , this problem is too complicated.
+;Let it go . QAQ
+;(swap! xx f arg1 arg2) = (reset! xx (ff xx arg1 arg2))
+(defn make-table []
+  (let [local-table (atom {})]
+    (letfn [(lookup [key-1 key-2]
+              (let [subtable (get @local-table key-1)]
+                (when subtable
+                  (get subtable key-2))))
+            (insert! [key-1 key-2 value]
+              (let [subtable (get @local-table key-1)]
+                (swap! local-table
+                  assoc key-1 (assoc subtable key-2 value))))]
+      (let [dispatch {:lookup lookup
+                      :insert insert!}]
+        #(% dispatch)))))
 
+;(def tab (make-table))
+;(tt ((tab :insert) 1 2 3))
