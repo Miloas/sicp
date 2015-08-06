@@ -133,4 +133,23 @@
                 :release (V n)))]
       the-semaphore)))
 
+;3.50
+(defn stream-map [proc & argstreams]
+  (lazy-seq
+    (if (empty? (first argstreams)) '()
+      (cons
+        (apply proc (map first argstreams))
+        (apply stream-map (cons proc (map rest argstreams)))))))
+
+;
+
+;3.54
+(defn factorials
+  ([] (factorials 1 2))
+  ([n m] (cons n (lazy-seq (factorials (* n m) (inc m))))))
+
+;3.54 test
+(deftest test-3-54
+  (is (= '(1 2 6 24 120) (take 5 (factorials)))))
+(test-3-54)
 
