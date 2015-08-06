@@ -141,7 +141,20 @@
         (apply proc (map first argstreams))
         (apply stream-map (cons proc (map rest argstreams)))))))
 
-;
+;sieve of Eratosthenes in Clojure,
+(defn sieve [stream]
+  (lazy-seq
+    (cons
+      (first stream)
+      (sieve (filter #(not= (mod % (first stream)) 0) (rest stream))))))
+
+(def prime (sieve (iterate inc 2)))
+
+;test algorithm
+(deftest lazy-prime-test
+  (is (= '(2 3 5 7 11) (take 5 prime))))
+(lazy-prime-test)
+
 
 ;3.54
 (defn factorials
