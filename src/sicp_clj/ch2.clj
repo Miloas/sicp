@@ -1,9 +1,8 @@
 ;ch2 solutions
-(ns ch2)
+(ns sicp-clj.ch2)
 
 ;test fn
 (def tt println)
-(use 'clojure.test)
 (use 'clojure.set)
 
 
@@ -14,11 +13,6 @@
   (let [v1 (Math/abs (gcd n d))
         v2 (if (neg? d) (- v1) v1)]
     [(/ n v2) (/ d v2)]))
-
-;2.1 test
-(deftest test-2-1
-  (is (= [-3 4] (make-rat -6 8))))
-(test-2-1)
 
 ;2.2
 (defn make-point [x y]
@@ -37,8 +31,8 @@
 
 (defn print-point [point]
   (println (format "(%d,%d)"
-             (get-x-coordinate point)
-             (get-y-coordinate point))))
+                   (get-x-coordinate point)
+                   (get-y-coordinate point))))
 
 (defn midpoint-segment [segment]
   (let [start-point (get-start-point segment)
@@ -47,10 +41,6 @@
         mid-y (/ (+ (get-y-coordinate start-point) (get-y-coordinate end-point)) 2)]
     (make-point mid-x mid-y)))
 
-;2.2 test
-(deftest test-2-2
-  (is (= [2 2] (midpoint-segment (make-segment [1 2] [3 2])))))
-(test-2-2)
 
 ;2.3
 
@@ -86,11 +76,6 @@
 (defn area-rec [rec]
   (* (get-width rec) (get-height rec)))
 
-;2.3 test
-(deftest test-2-3
-  (is (= 4 (circumference-rec (make-rec [1 1] [2 2])))
-  (is (= 1 (area-rec (make-rec [1 1] [2 2]))))))
-(test-2-3)
 
 ;(deftest test-2-3
 ;  (is (= 4 (circumference-rec (make-rec (make-segment [1 1] [1 2]) (make-segment [1 1] [2 1]))))
@@ -106,12 +91,6 @@
 (defn cdr1 [z]
   (z (fn [p q] q)))
 
-;2.4 test
-(deftest test-2-4
-  (is (= 2 (car1 (cons1 2 3)))
-  (is (= 3 (cdr1 (cons1 2 3))))))
-(test-2-4)
-
 ;2.5
 (defn cons2 [x y]
   (* (Math/pow 2 x)
@@ -120,17 +99,11 @@
   (loop [cnt 0
          n (int n)]
     (if (not= (rem n d) 0) cnt
-      (recur (inc cnt) (/ n d)))))
+                           (recur (inc cnt) (/ n d)))))
 (defn car2 [z]
   (divides-cnt z 2))
 (defn cdr2 [z]
   (divides-cnt z 3))
-
-;2.5 test
-(deftest test-2-5
-  (is (= 2 (car2 (cons2 2 3)))
-  (is (= 3 (cdr2 (cons2 2 3))))))
-(test-2-5)
 
 ;2.6
 (def one-church
@@ -152,12 +125,6 @@
 (defn lower-bound [interval]
   (first interval))
 
-;2.7 test
-(deftest test-2-7
-  (is (= 3 (upper-bound (make-interval 2 3))))
-  (is (= 2 (lower-bound (make-interval 2 3)))))
-(test-2-7)
-
 ;2.8
 (defn sub-interval [x y]
   (make-interval (- (lower-bound x) (upper-bound y))
@@ -173,11 +140,11 @@
                    (max p1 p2 p3 p4))))
 (defn div-interval [x y]
   (mul-interval x
-    (let [a (upper-bound y)
-          b (lower-bound y)]
-      (if (> (* a b) 0)
-        (make-interval (/ 1.0 a) (/ 1.0 b))
-        (throw (Exception. "除数不能为0"))))))
+                (let [a (upper-bound y)
+                      b (lower-bound y)]
+                  (if (> (* a b) 0)
+                    (make-interval (/ 1.0 a) (/ 1.0 b))
+                    (throw (Exception. "除数不能为0"))))))
 
 ;2.12
 ;What's the 2.12 meaning ?
@@ -192,22 +159,11 @@
 (defn last-pair [items]
   (list (last items)))
 
-;2.17 test
-(deftest test-2-17
-  (is (= (last-pair '(1 2 3)) (last-pair-iter '(1 2 3))))
-  (is (= (last-pair '(3 4 1)) (last-pair-recur '(3 4 1)))))
-(test-2-17)
-
 ;2.18
 (defn myreverse [items]
   (loop [items items
          acc  '()]
     (if items (recur (next items) (conj acc (first items))) acc)))
-
-;2.18 test
-(deftest test-2-18
-  (is (= '(3 2 1) (myreverse '(1 2 3)))))
-(test-2-18)
 
 ;2.19
 (defn first-denomination [items]
@@ -221,11 +177,6 @@
 (defn same-parity [x & xs]
   (cons x (filter (if (even? x) even? odd?) xs)))
 
-;2.20 test
-(deftest test-2-20
-  (is (= '(1 3 5 7) (same-parity 1 2 3 4 5 6 7))))
-(test-2-20)
-
 ;2.21
 (defn square [x] (* x x))
 (defn square-list1 [items]
@@ -234,11 +185,6 @@
     (cons (square (first items)) (square-list1 (next items)))))
 (defn square-list2 [items]
   (map square items))
-
-;2.21 test
-(deftest test-2-21
-  (is (= (square-list1 '(1 2 3)) (square-list2 '(1 2 3)))))
-(test-2-21)
 
 ;2.23
 (defn for-each [f items]
@@ -250,11 +196,6 @@
     (map deep-reverse (reverse items))
     items))
 
-;2.27 test
-(deftest test-2-27
-  (is (= '((4 3) (2 1)) (deep-reverse '((1 2) (3 4))))))
-(test-2-27)
-
 ;2.28
 (defn fringe [tree]
   (flatten tree))
@@ -264,12 +205,6 @@
    but (apply max [1 2 3]) works"
   (concat (if (seq? x) (apply fringe2 x) (list x))
           (if (nil? tree) nil (apply fringe2 tree))))
-
-;2.28 test
-(deftest test-2-28
-  (let [x '((1 2) (3 4))]
-    (is (= '(1 2 3 4 1 2 3 4) (fringe2 (list x x))))))
-(test-2-28)
 
 ;2.29
 (defn make-mobile [left right]
@@ -303,7 +238,6 @@
            (mobile-balanced? (branch-structure l))
            (mobile-balanced? (branch-structure r))))))
 
-
 ;2.30
 (defn square-tree [tree]
   (if (list? tree)
@@ -317,12 +251,6 @@
     (map square-tree2 tree)
     (square tree)))
 
-;2.30 test
-(deftest test-2-30
-  (is (= '(1 (4 (9 16) 25)) (square-tree (list 1 (list 2 (list 3 4) 5)))))
-  (is (= '(1 (4 (9 16) 25)) (square-tree2 (list 1 (list 2 (list 3 4) 5))))))
-(test-2-30)
-
 ;2.31
 (defn tree-map [f tree]
   (if (list? tree)
@@ -331,26 +259,11 @@
 (defn square-tree3 [tree]
   (tree-map square tree))
 
-;2.31 test
-(deftest test-2-31
-  (is (= '(1 (4 (9 16) 25)) (square-tree3 (list 1 (list 2 (list 3 4) 5))))))
-(test-2-31)
-
 ;2.32
 (defn subsets [s]
   (if (nil? s) '(())
-    (let [rest-s (subsets (next s))]
-      (concat rest-s (map #(cons (first s) %) rest-s)))))
-
-;2.32 test
-(deftest test-2-32
-  "set A = set B means : A is the subset of B and B is the subset of A .
-   In Clojure , method 'set' can translate list and vector to set data
-   structure"
-  (let [test-data '(() (1) (2) (3) (1 2) (1 3) (2 3) (1 2 3))]
-    (is (= true (subset? test-data (set (subsets '(1 2 3))))))
-    (is (= true (subset? (subsets '(1 2 3)) (set test-data))))))
-(test-2-32)
+               (let [rest-s (subsets (next s))]
+                 (concat rest-s (map #(cons (first s) %) rest-s)))))
 
 ;2.33
 ;It's interesting. accumulate method in Haskell is fold,
@@ -366,40 +279,15 @@
   (reduce #(cons %2 %1) seq2 (reverse seq1)))
 (defn length-by-accumulate [coll]
   (reduce (fn [acc item] (inc acc)) 0 coll))
-;2.33 test
-(deftest test-2-33
-  (is (= (map square '(1 2 3)) (map-by-accumulate square '(1 2 3))))
-  (is (= (concat '(2 7 8) '(3 2 1)) (append-by-accumulate '(2 7 8) '(3 2 1))))
-  (is (= (count '(1 2 3)) (length-by-accumulate '(1 2 3)))))
-(test-2-33)
 
 ;2.34
 (defn horner-eval [x coefficient-list]
   (let [temp (reverse coefficient-list)]
     (reduce #(+ %2 (* x %1)) (first temp) (rest temp))))
 
-;2.34 test
-(deftest test-2-34
-  (is (= 79 (horner-eval 2 '(1 3 0 5 0 1)))))
-(test-2-34)
-
 ;2.35
 (defn count-leaves [tree]
   (reduce + 0 (map #(if (list? %) (count-leaves %) 1) tree)))
-
-;2.35 test
-;
-;     (1((1 2)1))
-;      /       \
-;     1     ((1 2)1)
-;            /    \
-;         (1 2)    1
-;         /   \
-;        1     2
-;
-(deftest test-2-35
-  (is (= 4 (count-leaves '(1 ((1 2) 1))))))
-(test-2-35)
 
 ;2.36
 (defn accumulate [op init seqs]
@@ -418,11 +306,6 @@
     (cons (accumulate op init (map first seqs))
           (accumulate-n op init (map next seqs)))))
 
-;2.36 test
-(deftest test-2-36
-  (is (= '(22 26 30) (accumulate-n + 0 '((1 2 3) (4 5 6) (7 8 9) (10 11 12))))))
-(test-2-36)
-
 ;2.37
 (defn dot-product [v w]
   (accumulate + 0 (map * v w)))
@@ -434,12 +317,6 @@
   (let [cols (transpose n)]
     (map (fn [row] (map #(dot-product row %) cols)) m)))
 
-;2.37 test
-(deftest test-2-37
-  (let [m '((1 2 3) (4 5 6) (7 8 9))]
-    (is (= '((30 36 42) (66 81 96) (102 126 150)) (matrix-*-matrix m m)))))
-(test-2-37)
-
 ;2.39
 (defn reverse-foldl [seqs]
   (reduce #(cons %2 %1) nil seqs))
@@ -447,21 +324,9 @@
   "(concat nil x) equal x"
   (accumulate #(concat %2 (list %1)) nil seqs))
 
-;2.39 test
-(deftest test-2-39
-  (let [test-data '(1 7 2 9)]
-    (is (= (reverse test-data) (reverse-foldl test-data)))
-    (is (= (reverse test-data) (reverse-foldr test-data)))))
-(test-2-39)
-
 ;2.40
 (defn unique-pairs [n]
   (mapcat (fn [x] (map #(list % x) (range 1 (inc x)))) (range 1 (inc n))))
-
-;2.40 test
-(deftest test-2-40
-  (is (= '((1 1) (1 2) (2 2) (1 3) (2 3) (3 3) (1 4) (2 4) (3 4) (4 4)) (unique-pairs 4))))
-(test-2-40)
 
 ;2.41
 (defn unique-triples [n]
@@ -471,12 +336,6 @@
     (list x y z)))
 (defn solver-2-41 [n s]
   (filter #(= s (reduce + 0 %)) (unique-triples n)))
-
-;2.41 test
-(deftest test-2-41
-  (is (= '((1 2 3) (1 2 4) (1 3 4) (2 3 4)) (unique-triples 4)))
-  (is (= '((1 2 3)) (solver-2-41 4 6))))
-(test-2-41)
 
 ;2.42
 (def empty-board nil)
@@ -492,36 +351,24 @@
   (cons row queens))
 (defn queens [board-size]
   (defn queen-cols [k]
-            (if (= k 0)
-              (list empty-board)
-              (filter
-                #(safe? k %)
-                (mapcat
-                  (fn [rest-of-queeens]
-                    (map (fn [new-rows]
-                           (adjoin-position new-rows k rest-of-queeens))
-                      (range 1 (inc board-size))))
-                  (queen-cols (dec k))))))
+    (if (= k 0)
+      (list empty-board)
+      (filter
+        #(safe? k %)
+        (mapcat
+          (fn [rest-of-queeens]
+            (map (fn [new-rows]
+                   (adjoin-position new-rows k rest-of-queeens))
+                 (range 1 (inc board-size))))
+          (queen-cols (dec k))))))
   (queen-cols board-size))
-
-;2.42 test
-(deftest test-2-42
-  (is (= 92 (count (queens 8)))))
-(test-2-42)
 
 ;2.54
 (defn equal? [seq1 seq2]
   (if (and (not (list? seq1)) (not (list? seq2))) (= seq1 seq2)
-    (if (and (list? seq1) (list? seq2))
-      (and (equal? (first seq1) (first seq2)) (equal? (next seq1) (next seq2)))
-      false)))
-
-;2.54 test
-(deftest test-2-54
-  (is (= true (equal? '(this is a list) '(this is a list))))
-  (is (= false (equal? '(this is a list) '(this (is a) list))))
-  (is (= false (equal? '(this is a list) '(this is a vector)))))
-(test-2-54)
+                                                  (if (and (list? seq1) (list? seq2))
+                                                    (and (equal? (first seq1) (first seq2)) (equal? (next seq1) (next seq2)))
+                                                    false)))
 
 ;2.56 and 2.57
 (def variable? symbol?)
@@ -567,17 +414,11 @@
         (variable? exp) (if (same-variable? exp var) 1 0)
         (sum? exp) (make-sum (deriv (addend exp) var) (deriv (augend exp) var))
         (product? exp) (make-sum (make-product (multipiler exp) (deriv (multiplicand exp) var))
-                     (make-product (deriv (multipiler exp) var) (multiplicand exp)))
+                                 (make-product (deriv (multipiler exp) var) (multiplicand exp)))
         (exponentiation? exp) (make-product (exponent exp)
-                                (make-product (make-exponentiation (base exp) (dec (exponent exp)))
-                                  (deriv (base exp) var)))
+                                            (make-product (make-exponentiation (base exp) (dec (exponent exp)))
+                                                          (deriv (base exp) var)))
         :else (throw (Exception. (format "unknow expression type %s DERUV" exp)))))
-
-;2.56 test
-(deftest test-2-56
-  (is (= '(* 9 (** x 2)) (deriv '(* 3 (** x 3)) 'x)))
-  (is (= 3 (deriv '(+ x x x) 'x))))
-(test-2-56)
 
 ;2.59
 (defn element-of-set? [x set]
@@ -586,11 +427,6 @@
   (if (element-of-set? x set) set (cons x set)))
 (defn union-set [set1 set2]
   (reduce #(adjoin-set %2 %1) set1 set2))
-
-;2.59 test
-(deftest test-2-59
-  (is (= (set '(1 2 3 4)) (set (union-set '(1 2 3) '(3 4))))))
-(test-2-59)
 
 ;2.60
 (defn element-of-multiset? [x multiset]
@@ -611,11 +447,6 @@
           (< x (first yy)) (concat xx [x] yy)
           :else (recur (conj (vec xx) (first yy)) (next yy)))))
 
-;2.61 test
-(deftest test-2-61
-  (is (= '(1 2 3 4) (adjoin-sorted-set 3 '(1 2 4))))
-  (is (= '(1 2 3 4) (adjoin-sorted-set 4 '(1 2 3)))))
-(test-2-61)
 
 ;2.62
 (defn union-sorted-set [[x & xs :as set1] [y & ys :as set2]]
@@ -624,11 +455,6 @@
         (= x y) (cons x (union-sorted-set xs ys))
         (> x y) (cons y (union-sorted-set set1 ys))
         :else   (cons x (union-sorted-set xs set2))))
-
-;2.62 test
-(deftest test-2-62
-  (is (= '(1 2 3 4) (union-sorted-set '(1 2 3) '(2 3 4)))))
-(test-2-62)
 
 ;2.65
 (defn entry [tree] (first tree))
@@ -643,9 +469,9 @@
         :else (element-of-tree-set x (right-branch-tree set))))
 (defn adjoin-tree-set [x set]
   (cond (nil? set) (make-tree x nil nil)
-    (= x (entry set)) set
-    (< x (entry set)) (make-tree (entry set) (adjoin-tree-set x (left-branch-tree set)) (right-branch-tree set))
-    :else (make-tree (entry set) (left-branch-tree set) (adjoin-tree-set x (right-branch-tree set)))))
+        (= x (entry set)) set
+        (< x (entry set)) (make-tree (entry set) (adjoin-tree-set x (left-branch-tree set)) (right-branch-tree set))
+        :else (make-tree (entry set) (left-branch-tree set) (adjoin-tree-set x (right-branch-tree set)))))
 (defn union-tree-set [set1 set2]
   "Transform set to an sorted list ,and union, last transform unioned list to tree,
    all of needed method on the book."
@@ -671,10 +497,10 @@
   "Don't use 'nth' in lazy sequence will throw a exception,
    'concat' will generate a lazy sequence, be careful."
   (if (leaf? tree) (list (symbol-leaf tree))
-    (second (rest tree))))
+                   (second (rest tree))))
 (defn weight [tree]
   (if (leaf? tree) (weight-leaf tree)
-    (second (rest (rest tree)))))
+                   (second (rest (rest tree)))))
 (defn make-code-tree [left right]
   (list left right (concat (symbols left) (symbols right)) (+ (weight left) (weight right))))
 (defn choose-branch [bit branch]
@@ -686,21 +512,16 @@
          branch tree
          acc []]
     (if (nil? bits) acc
-      (let [next-branch (choose-branch (first bits) branch)]
-        (if (leaf? next-branch)
-          (recur (next bits) tree (conj acc (symbol-leaf next-branch)))
-          (recur (next bits) next-branch acc))))))
+                    (let [next-branch (choose-branch (first bits) branch)]
+                      (if (leaf? next-branch)
+                        (recur (next bits) tree (conj acc (symbol-leaf next-branch)))
+                        (recur (next bits) next-branch acc))))))
 (def sample-tree
   (make-code-tree (make-leaf 'A 4)
                   (make-code-tree (make-leaf 'B 2)
-                    (make-code-tree (make-leaf 'D 1)
-                      (make-leaf 'C 1)))))
+                                  (make-code-tree (make-leaf 'D 1)
+                                                  (make-leaf 'C 1)))))
 (def sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
-
-;2.67 test
-(deftest test-2-67
-  (is (= '(A D A B B C A) (decode sample-message sample-tree))))
-(test-2-67)
 
 ;2.68
 (defn encode-symbol [symbol tree]
@@ -720,12 +541,6 @@
 (defn encode [message tree]
   (reduce #(concat %1 (encode-symbol %2 tree)) '() message))
 
-;2.68 test
-(deftest test-2-68
-  (let [message '(A D A B B C A)]
-    (is (= message (decode (encode message sample-tree) sample-tree)))))
-(test-2-68)
-
 ;2.69
 (defn adjoin-huff-set [set x]
   (cond (empty? set) (list x)
@@ -733,8 +548,8 @@
         :else (cons (first set) (adjoin-huff-set (rest set) x))))
 (defn make-leaf-set [pairs]
   (reduce #(adjoin-huff-set %1 %2)
-             '()
-             pairs))
+          '()
+          pairs))
 (defn successive-merge [leaves]
   (let [[l r & set] leaves]
     (if set
@@ -743,8 +558,4 @@
 (defn generate-huffman-tree [pairs]
   (successive-merge (make-leaf-set pairs)))
 
-;2.69 test
-(deftest test-2-69
-  (is (= sample-tree (generate-huffman-tree (list (make-leaf 'A 4) (make-leaf 'B 2) (make-leaf 'D 1) (make-leaf 'C 1))))))
-(test-2-69)
 

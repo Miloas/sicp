@@ -1,16 +1,15 @@
 ;ch3 solutions
-(ns ch3)
+(ns sicp-clj.ch3)
 
 ;test fn
 (def tt println)
-(use 'clojure.test)
 
 ;try atom
 (def balance (atom 100))
 (defn withdraw [amount]
   (if (>= @balance amount)
-      ;(reset! balance (- @balance amount))
-      (swap! balance #(- % amount))
+    ;(reset! balance (- @balance amount))
+    (swap! balance #(- % amount))
     (throw (RuntimeException. "Insufficient funds."))))
 
 ;3.1
@@ -19,30 +18,15 @@
     (fn [value]
       (swap! acc #(+ % value)))))
 
-;3.1 test
-(deftest test-3-1
-  (let [A (make-accumulator 5)]
-    (is (= 15 (A 10)))
-    (is (= 25 (A 10)))))
-(test-3-1)
-
 ;3.2
 (defn make-monitored [f]
   (let [count (atom 0)]
     (fn [x]
-    (cond (= x 'reset-count) (reset! count 0)
-          (= x 'how-many-calls?) @count
-          :else (do
-                  (swap! count inc)
-                  (f x))))))
-
-;3.2 test
-(deftest test-3-2
-  (let [s (make-monitored #(Math/sqrt %))]
-    (is (= 10.0 (s 100)))
-    (is (= 1 (s 'how-many-calls?)))
-    (is (= 0 (s 'reset-count)))))
-(test-3-2)
+      (cond (= x 'reset-count) (reset! count 0)
+            (= x 'how-many-calls?) @count
+            :else (do
+                    (swap! count inc)
+                    (f x))))))
 
 ;3.3 and 3.4
 (defn make-acount [amount password]
@@ -51,23 +35,16 @@
     (fn [secret-password op]
       (fn [x]
         (let [call-the-cops (fn [] (println "Cops comming."))]
-        (if (= secret-password password)
-          (cond (= op 'withdraw) (if (>= x @balance)
-                                   (throw (RuntimeException. "Insufficient funds"))
-                                   (swap! balance #(- % x)))
-                (= op 'deposit) (swap! balance #(+ % x))
-                :else (throw (RuntimeException. "Unknow request")))
-          (do
-            (swap! count inc)
-            (when (= @count 7) call-the-cops)
-            (throw (RuntimeException. "Password incorrect")))))))))
-
-;3.3 and 3.4 test
-(deftest test-3-3and4
-  (let [acc (make-acount 100 '123456)]
-    (is (= 60 ((acc '123456 'withdraw) 40)))
-    (is (= 100 ((acc '123456 'deposit) 40)))))
-(test-3-3and4)
+          (if (= secret-password password)
+            (cond (= op 'withdraw) (if (>= x @balance)
+                                     (throw (RuntimeException. "Insufficient funds"))
+                                     (swap! balance #(- % x)))
+                  (= op 'deposit) (swap! balance #(+ % x))
+                  :else (throw (RuntimeException. "Unknow request")))
+            (do
+              (swap! count inc)
+              (when (= @count 7) call-the-cops)
+              (throw (RuntimeException. "Password incorrect")))))))))
 
 ;3.5
 (defn monte-carlo [trials experiment]
@@ -88,10 +65,10 @@
 ;3.7
 (defn make-joint [account password new-password]
   (do ((account password 'withdraw) 0)
-    (fn [p op]
-      (if (= p new-password)
-        (account password op)
-        (account 'invalid-password op)))))
+      (fn [p op]
+        (if (= p new-password)
+          (account password op)
+          (account 'invalid-password op)))))
 
 ;3.24
 ;If use Clojure's 'assoc' , this problem is too complicated.
@@ -100,13 +77,13 @@
 (defn make-table []
   (let [local-table (atom {})]
     (letfn [(lookup [key-1 key-2]
-              (let [subtable (get @local-table key-1)]
-                (when subtable
-                  (get subtable key-2))))
+                    (let [subtable (get @local-table key-1)]
+                      (when subtable
+                        (get subtable key-2))))
             (insert! [key-1 key-2 value]
-              (let [subtable (get @local-table key-1)]
-                (swap! local-table
-                  assoc key-1 (assoc subtable key-2 value))))]
+                     (let [subtable (get @local-table key-1)]
+                       (swap! local-table
+                              assoc key-1 (assoc subtable key-2 value))))]
       (let [dispatch {:lookup lookup
                       :insert insert!}]
         #(% dispatch)))))
@@ -128,18 +105,18 @@
 (defn make-semaphore [n]
   (let [n (atom n)]
     (letfn [(the-semaphore [op]
-              (condp = op
-                :acquire (when (= (P n) false) (the-semaphore n))
-                :release (V n)))]
+                           (condp = op
+                             :acquire (when (= (P n) false) (the-semaphore n))
+                             :release (V n)))]
       the-semaphore)))
 
 ;3.50
 (defn stream-map [proc & argstreams]
   (lazy-seq
     (if (empty? (first argstreams)) '()
-      (cons
-        (apply proc (map first argstreams))
-        (apply stream-map (cons proc (map rest argstreams)))))))
+                                    (cons
+                                      (apply proc (map first argstreams))
+                                      (apply stream-map (cons proc (map rest argstreams)))))))
 
 ;sieve of Eratosthenes in Clojure,
 (defn sieve [stream]
@@ -150,21 +127,10 @@
 
 (def prime (sieve (iterate inc 2)))
 
-;test algorithm
-(deftest lazy-prime-test
-  (is (= '(2 3 5 7 11) (take 5 prime))))
-(lazy-prime-test)
-
-
 ;3.54
 (defn factorials
   ([] (factorials 1 2))
   ([n m] (cons n (lazy-seq (factorials (* n m) (inc m))))))
-
-;3.54 test
-(deftest test-3-54
-  (is (= '(1 2 6 24 120) (take 5 (factorials)))))
-(test-3-54)
 
 ;3.55
 (defn partial-sums [streams]
@@ -173,7 +139,3 @@
             ([n m] (cons n (lazy-seq (help (+ n (first m)) (rest m))))))]
     (help)))
 
-;3.55 test
-(deftest test-3-55
-  (is (= '(1 3 6 10 15) (take 5 (partial-sums (iterate inc 1))))))
-(test-3-55)
