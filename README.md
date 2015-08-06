@@ -1,14 +1,9 @@
 # sicp-clj
 
-A Clojure library designed to ... well, that part is up to you.
+这个仓库存放我所有的《sicp》的习题解答，使用Clojure (leiningen).
+你可以不负责任的拿去随便学习，更改不用争得我的同意，如果对你有帮助，star一下吧 :)
 
-## Usage
 
-FIXME
 
-## License
 
-Copyright © 2015 FIXME
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
