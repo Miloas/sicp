@@ -113,3 +113,24 @@
 
 ;(def tab (make-table))
 ;(tt ((tab :insert) 1 2 3))
+
+;.3.47
+;Follow <Operating Systems:Internals and Design Principles,Fifth Edition> P.217
+;Book author: William Stallings
+;P and V are atom operations,according to problem description,we only should
+;implement it with 'test-and-set!' method.
+(defn P [n]
+  (do
+    (swap! n dec)
+    (if (< @n 0) false true)))
+(defn V [n]
+  (swap! n inc))
+(defn make-semaphore [n]
+  (let [n (atom n)]
+    (letfn [(the-semaphore [op]
+              (condp = op
+                :acquire (when (= (P n) false) (the-semaphore n))
+                :release (V n)))]
+      the-semaphore)))
+
+
