@@ -166,3 +166,14 @@
   (is (= '(1 2 6 24 120) (take 5 (factorials)))))
 (test-3-54)
 
+;3.55
+(defn partial-sums [streams]
+  (letfn [(help
+            ([] (help (first streams) (rest streams)))
+            ([n m] (cons n (lazy-seq (help (+ n (first m)) (rest m))))))]
+    (help)))
+
+;3.55 test
+(deftest test-3-55
+  (is (= '(1 3 6 10 15) (take 5 (partial-sums (iterate inc 1))))))
+(test-3-55)
