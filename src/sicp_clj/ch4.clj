@@ -45,8 +45,18 @@
     (make-lambda (-> exp second rest)
                  (-> exp rest rest))))
 
-
-
+(defn if? [exp]
+  (tagged-list? exp 'if))
+(defn if-predicate [exp]
+  (second exp))
+(defn if-consequent [exp]
+  (nth exp 2))
+(defn if-alternative [exp]
+  (if (not (nil? (-> exp next next next)))
+    (-> exp next next next)
+    'false))
+(defn make-if [predicate consequent alternative]
+  (list 'if predicate consequent alternative))
 
 
 
