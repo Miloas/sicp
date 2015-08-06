@@ -1,5 +1,5 @@
 ;ch1 solutions
-(ns sicp.ch1)
+(ns ch1)
 
 ;test fn
 (def tt println)
