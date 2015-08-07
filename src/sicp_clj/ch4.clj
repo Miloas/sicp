@@ -58,6 +58,25 @@
 (defn make-if [predicate consequent alternative]
   (list 'if predicate consequent alternative))
 
+(defn begin? [exp]
+  (tagged-list? exp 'begin))
+(defn begin-action [exp]
+  (rest exp))
+(defn last-exp? [seq]
+  (-> seq rest nil?))
+(defn first-exp [seq]
+  (first seq))
+(defn rest-exps [seq]
+  (rest seq))
+(defn make-begin [seq]
+  (cons 'begin seq))
+(defn sequence->exp [seq]
+  (cond (nil? seq) seq
+        (last-exp? seq) (first-exp seq)
+        :else (make-begin seq)))
+
+
+
 
 
 
