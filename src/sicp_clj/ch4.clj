@@ -29,7 +29,7 @@
 (defn lambda-parameters [exp]
   (second exp))
 (defn lambda-body [exp]
-  (-> exp rest rest))
+  (-> exp next next))
 (defn make-lambda [parameters body]
   (list 'lambda parameters body))
 
@@ -42,8 +42,8 @@
 (defn definition-value [exp]
   (if (symbol? (second exp))
     (nth exp 2)
-    (make-lambda (-> exp second rest)
-                 (-> exp rest rest))))
+    (make-lambda (-> exp second next)
+                 (-> exp next next))))
 
 (defn if? [exp]
   (tagged-list? exp 'if))
@@ -87,6 +87,32 @@
   (first ops))
 (defn rest-operands [ops]
   (rest ops))
+
+(defn cond? [exp]
+  (tagged-list? exp 'cond))
+(defn cond-clauses [exp]
+  (next exp))
+(defn cond-preducate [clause]
+  (first clause))
+(defn cond-actions [clause]
+  (next clause))
+(defn cond-else-clauses? [clause]
+  (= (cond-preducate clause) 'else))
+(defn expand-clauses [clauses]
+  (if (nil? clauses)
+    'false
+    (let [f (first clauses)
+          r (next clauses)]
+      (if (cond-else-clauses? f)
+        (if (nil? r)
+          (sequence->exp (cond-actions f))
+          (throw (RuntimeException. (format "ELSE clause isn't last %s COND->IF" clauses))))
+        (make-if (cond-preducate f)
+                 (sequence->exp (cond-actions r))
+                 (expand-clauses r))))))
+(defn cond->if [exp]
+  (-> exp cond-clauses expand-clauses))
+
 
 
 
