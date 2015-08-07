@@ -121,6 +121,18 @@
 (defn apply-primitive-procedure [proc args]
   (apply' (primitive-implementation proc) args))
 
+(defn make-procedure [parameters body env]
+  (list 'procedure parameters body env))
+(defn compound-procedure? [p]
+  (tagged-list? p 'procedure))
+(defn procedure-parameters [p]
+  (second p))
+(defn procedure-body [p]
+  (nth p 2))
+(defn procedure-env [p]
+  (nth p 3))
+
+
 
 
 
