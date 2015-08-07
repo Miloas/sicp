@@ -113,6 +113,15 @@
 (defn cond->if [exp]
   (-> exp cond-clauses expand-clauses))
 
+(defn primitive-procedure? [proc]
+  (tagged-list? proc 'primitive))
+(defn primitive-implementation [proc]
+  (second proc))
+(declare apply')
+(defn apply-primitive-procedure [proc args]
+  (apply' (primitive-implementation proc) args))
+
+
 
 
 
