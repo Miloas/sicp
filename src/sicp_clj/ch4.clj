@@ -63,7 +63,7 @@
 (defn begin-action [exp]
   (rest exp))
 (defn last-exp? [seq]
-  (-> seq rest nil?))
+  (-> seq next nil?))
 (defn first-exp [seq]
   (first seq))
 (defn rest-exps [seq]
@@ -74,6 +74,21 @@
   (cond (nil? seq) seq
         (last-exp? seq) (first-exp seq)
         :else (make-begin seq)))
+
+(defn application? [exp]
+  (list? exp))
+(defn operator [exp]
+  (first exp))
+(defn operands [exp]
+  (next exp))
+(defn no-operands? [ops]
+  (nil? ops))
+(defn first-operands [ops]
+  (first ops))
+(defn rest-operands [ops]
+  (rest ops))
+
+
 
 
 
