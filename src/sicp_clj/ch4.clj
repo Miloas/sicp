@@ -4,7 +4,7 @@
 (def tt println)
 
 ;eval and apply
-(defn self-evelating [exp]
+(defn self-evelating? [exp]
   (or (number? exp) (string? exp)))
 (def variable? symbol?)
 
@@ -129,7 +129,7 @@
   (second p))
 (defn procedure-body [p]
   (nth p 2))
-(defn procedure-env [p]
+(defn procedure-enviroment [p]
   (nth p 3))
 
 (defn enclosing-enviroment [env]
@@ -152,13 +152,61 @@
   (some (comp #(get % var) deref) env))
 (defn find-first-frame-containing [var env]
   (some #(when (contains? (deref %) var) %) env))
-(defn set-variable-value [var val env]
+(defn set-variable-value! [var val env]
   (when-let [frame (find-first-frame-containing var env)]
     (add-binding-to-frame! var val frame)))
 (defn define-variable! [var val env]
   (add-binding-to-frame! var val
                          (or (find-first-frame-containing var env)
                              (first-frame env))))
+
+(declare eval')
+(defn eval-assignment [exp env]
+  (set-variable-value! (assignment-variable exp)
+                       (eval' (assignment-value exp) env)
+                       env))
+(defn eval-definition [exp env]
+  (define-variable! (definition-variable exp)
+                    (eval' (definition-value exp) env)
+                    env))
+(defn eval-if [exp env]
+  (if (eval' (if-predicate exp) env)
+    (eval' (if-consequent exp) env)
+    (eval' (if-alternative exp) env)))
+(defn eval-sequence [exps env]
+  (if (last-exp? exps)
+    (eval' (first-exp exps) env)
+    (do
+      (eval' (first-exp exps) env)
+      (recur (rest-exps exps) env))))
+(defn apply' [procedure arguments]
+  (cond (primitive-procedure? procedure) (apply-primitive-procedure procedure arguments)
+        (compound-procedure? procedure) (eval-sequence
+                                          (procedure-body procedure)
+                                          (extend-enviroment (procedure-parameters procedure)
+                                                             arguments
+                                                             (procedure-enviroment procedure)))
+        :else (throw (RuntimeException. (format "Unknow procedure type %s APPLY" procedure)))))
+(defn list-of-values [exps env]
+  (if (no-operands? exps)
+    '()
+    (cons (eval' (first-operands exps) env)
+          (list-of-values (rest-operands exps) env))))
+
+(defn eval' [exp env]
+  (cond (self-evelating? exp) exp
+        (variable? exp) (lookup-variable-value exp env)
+        (quoted? exp) (text-of-quotation exp)
+        (assignment? exp) (eval-assignment exp env)
+        (definition? exp) (eval-definition exp env)
+        (if? exp) (eval-if exp env)
+        (lambda? exp) (make-procedure (lambda-parameters exp)
+                                      (lambda-body exp)
+                                      env)
+        (begin? exp) (eval-sequence exp env)
+        (cond? exp) (eval' (cond->if exp) env)
+        (application? exp) (apply' (eval' (operator exp) env) (list-of-values (operands exp) env))
+        :else (throw (RuntimeException. (format "Unknow expression type %s EVAL" exp)))))
 
 
 
