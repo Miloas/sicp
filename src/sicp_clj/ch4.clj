@@ -132,7 +132,33 @@
 (defn procedure-env [p]
   (nth p 3))
 
-
+(defn enclosing-enviroment [env]
+  (next env))
+(defn first-frame [env]
+  (first env))
+(def the-empty-env '())
+(defn make-frame [variables values]
+  (atom (zipmap variables values)))
+(defn frame-variables [frame]
+  (keys frame))
+(defn frame-values [frame]
+  (vals frame))
+(defn add-binding-to-frame! [var val frame]
+  (swap! frame assoc var val))
+(defn extend-enviroment [vars vals base]
+  (when (= (count vars) (count vals))
+    (cons (make-frame vars vals) base)))
+(defn lookup-variable-value [var env]
+  (some (comp #(get % var) deref) env))
+(defn find-first-frame-containing [var env]
+  (some #(when (contains? (deref %) var) %) env))
+(defn set-variable-value [var val env]
+  (when-let [frame (find-first-frame-containing var env)]
+    (add-binding-to-frame! var val frame)))
+(defn define-variable! [var val env]
+  (add-binding-to-frame! var val
+                         (or (find-first-frame-containing var env)
+                             (first-frame env))))
 
 
 
